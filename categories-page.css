@@ -1,0 +1,7 @@
+.categories-index-body{background:#000}
+.categories-overview{min-height:calc(100vh - 60px);padding:72px 0 92px}
+.categories-overview-head{border-left:3px solid #ffce00;padding-left:20px}
+.categories-overview-head>span{display:block;color:#ffce00;font-size:16px;font-weight:700;letter-spacing:.14em;margin-bottom:8px}
+.categories-overview-head h1{font:900 clamp(42px,5vw,72px)/1 Exo2,Bahnschrift,'Arial Narrow',Arial,sans-serif;text-transform:uppercase}
+.categories-overview .categories{padding-top:52px;padding-bottom:0}
+@media(max-width:600px){.categories-overview{padding:44px 0 64px}.categories-overview-head{padding-left:14px}.categories-overview-head h1{font-size:38px}.categories-overview .categories{padding-top:36px;padding-bottom:0}}

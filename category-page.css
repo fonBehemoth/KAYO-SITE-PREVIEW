@@ -1,0 +1,32 @@
+.category-detail-body{background:#000}
+.category-detail-breadcrumb{height:46px;background:#343436;color:#fff;display:flex;align-items:center;padding:0 max(24px,4.4vw);font-size:15px;text-transform:uppercase}
+.category-detail-breadcrumb span{opacity:.72;margin:0 12px}
+.category-detail-hero{position:relative;height:520px;overflow:hidden;background:#050505}
+.category-detail-hero picture,.category-detail-hero img{display:block;width:100%;height:100%}
+.category-detail-hero img{object-fit:cover;opacity:.72}
+.category-detail-hero:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.12),rgba(0,0,0,.84))}
+.category-detail-hero-copy{position:absolute;z-index:1;right:max(40px,7vw);top:50%;width:min(560px,44%);transform:translateY(-50%);text-align:center}
+.category-detail-hero h1{margin:0;font:900 clamp(40px,4.5vw,64px)/1.04 Exo2,Arial,sans-serif;text-transform:uppercase}
+.category-detail-hero p{margin:20px 0 0;color:#ffce00;font-size:21px;line-height:1.3;text-transform:uppercase}
+.category-detail-main{background:#fafbfc;color:#202124;padding:70px max(24px,4.4vw) 90px}
+.category-detail-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:70px;width:min(1120px,100%);margin:auto}
+.category-detail-content{min-width:0}
+.category-detail-intro{font-size:21px;line-height:1.62;margin:0 0 44px}
+.category-detail-content section{margin-top:38px}
+.category-detail-content h2{font:800 25px/1.2 Exo2,Arial,sans-serif;text-transform:uppercase;margin:0 0 16px}
+.category-detail-content p,.category-detail-content li{font-size:17px;line-height:1.58}
+.category-detail-content ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px 32px;margin:0;padding:0;list-style:none}
+.category-detail-content li{position:relative;padding-left:20px}
+.category-detail-content li:before{content:'';position:absolute;left:0;top:.66em;width:7px;height:7px;background:#ffce00;transform:rotate(45deg)}
+.category-detail-aside{align-self:start;position:sticky;top:24px;border:1px solid #c9d1d9;border-radius:9px;background:#eef3f8;padding:24px}
+.category-detail-aside h2{font:800 25px/1.18 Exo2,Arial,sans-serif;text-transform:uppercase;margin:0 0 22px}
+.category-detail-aside .yellow{width:100%;min-height:58px;padding:12px 18px;text-align:center;text-transform:uppercase}
+@media(max-width:800px){.category-detail-hero{height:470px}.category-detail-hero:after{background:linear-gradient(0deg,#000 4%,transparent 65%)}.category-detail-hero-copy{left:20px;right:20px;top:auto;bottom:42px;width:auto;transform:none}.category-detail-hero h1{font-size:38px}.category-detail-hero p{font-size:17px;margin-top:12px}.category-detail-main{padding:44px 18px 60px}.category-detail-layout{display:flex;flex-direction:column;gap:40px}.category-detail-intro{font-size:18px;margin-bottom:34px}.category-detail-content h2{font-size:22px}.category-detail-content p,.category-detail-content li{font-size:16px}.category-detail-content ul{grid-template-columns:1fr}.category-detail-aside{position:static;width:100%;padding:20px}.category-detail-aside h2{font-size:22px}}
+
+/* Exact supplied Gloves campaign photo: preserve its focal product in both crops. */
+.category-detail-body[data-category="gloves"] .category-detail-hero img{object-position:center 62%}
+@media(max-width:800px){.category-detail-body[data-category="gloves"] .category-detail-hero img{object-position:center}}
+
+/* Accessories currently use the confirmed product photograph supplied in the catalog. */
+.category-detail-body[data-category="accessories"] .category-detail-hero picture{background:#fff}
+.category-detail-body[data-category="accessories"] .category-detail-hero img{object-fit:contain;opacity:1}

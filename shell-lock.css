@@ -1,0 +1,10 @@
+/* Shared KAYO shell: keep the header identical to the approved home page. */
+header{height:60px;padding:0 34px 0 60px;display:flex;align-items:center;gap:25px;background:#000;position:relative;z-index:2}
+header .brand{margin-right:auto;line-height:0}
+header .brand img{width:120px;height:30px}
+header nav{display:flex;gap:23px;align-items:center;text-transform:uppercase;white-space:nowrap;font-size:18px}
+.language select{background:#000;color:#fff;border:0;padding:5px 0;cursor:pointer;font-size:18px}
+.hamburger{display:none}
+@media (min-width:601px) and (max-width:1150px){header{padding:0 30px;gap:15px}header nav{gap:12px;font-size:14px}}
+@media (min-width:601px) and (max-width:1000px){header nav{display:none}.hamburger{display:block}}
+@media (max-width:600px){header{height:58px;padding:0 16px;gap:24px}header nav{display:none}.brand img{width:120px;height:30px}.language{order:1;margin-left:auto}.search{order:2;margin:0}.hamburger{display:block;order:3;font-size:26px;line-height:1}}
