@@ -5,7 +5,7 @@ const en=dictionaries.en;let current=dictionaries[saved]||en;const t=key=>typeof
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
 const asset=(name)=>{const im=node('img');im.src=`assets/${name}.webp`;im.alt='';return im};
 const marqueeTrack=document.querySelector('.marquee-track');
-if(marqueeTrack){
+if(marqueeTrack && !marqueeTrack.children.length){
  for(let groupIndex=0;groupIndex<2;groupIndex++){
   const group=node('div','marquee-group');
   for(let i=0;i<12;i++)group.append(asset('logo'));
