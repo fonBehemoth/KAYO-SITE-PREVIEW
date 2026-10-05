@@ -188,6 +188,7 @@
       if (event.target.closest('[data-modal-close]')) closeProductModal();
     });
     document.body.append(modal);
+    window.KayoGalleryUI.decorate(modal);
     return modal;
   }
 
@@ -197,9 +198,7 @@
     const categoryText = product.subtype
       ? product.section === 'protection' ? protectionLabel(product.subtype) : gloveLabel(product.subtype)
       : sectionTitle(sections.find((section) => section.slug === product.section));
-    const image = modal.querySelector('.product-modal-media img');
-    image.src = `assets/${product.image}.webp`;
-    image.alt = titleText;
+    window.KayoGalleryUI.update(modal, product, titleText, i18n.locale);
     modal.querySelector('.product-modal-category').textContent = categoryText;
     modal.querySelector('#product-modal-title').textContent = titleText;
     const sizes = modal.querySelector('.product-modal-sizes');
