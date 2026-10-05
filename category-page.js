@@ -1,6 +1,7 @@
 (() => {
   const i18n = window.KayoI18n;
   const page = document.body.dataset.category;
+  const cms = window.KayoCms || {};
   if (!i18n || !page) return;
 
   const labels = {
@@ -75,7 +76,19 @@
 
     const detail = document.querySelector('[data-category-detail]');
     detail.replaceChildren();
-    if (page !== 'gloves') return;
+    const additionalText = cms.categories?.[page]?.body?.[i18n.locale] || cms.categories?.[page]?.body?.en || '';
+    const appendAdditionalText = () => {
+      for (const paragraph of additionalText.split(/\n\s*\n/).map((value) => value.trim()).filter(Boolean)) {
+        const node = document.createElement('p');
+        node.className = 'category-detail-intro';
+        node.textContent = paragraph;
+        detail.append(node);
+      }
+    };
+    if (page !== 'gloves') {
+      appendAdditionalText();
+      return;
+    }
 
     const copy = gloveCopy[i18n.locale] || gloveCopy.en;
     const intro = document.createElement('p');
@@ -107,6 +120,7 @@
       return section;
     });
     detail.append(intro, features, ...textSections);
+    appendAdditionalText();
   }
 
   document.addEventListener('kayo:localechange', render);

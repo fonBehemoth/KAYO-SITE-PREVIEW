@@ -134,3 +134,18 @@ body>header{position:sticky!important;top:0;z-index:200}
   .hero p{font-size:clamp(15px,1.8vw,19px)}
   .ring-mark{z-index:2;right:5%;top:7%}
 }
+
+/* Only uploaded editorial images override the approved static artwork. */
+@media(min-width:1281px){
+  .hero.cms-media{background-image:var(--cms-hero-desktop,url('assets/figma-hero-background-clean.png'))}
+}
+@media(min-width:601px) and (max-width:1280px){
+  .hero.cms-media{background-image:linear-gradient(90deg,transparent 0 50%,rgba(0,0,0,.94) 61%,#000 100%),var(--cms-hero-desktop,url('assets/figma-hero-background-clean.png'))}
+}
+@media(max-width:600px){
+  .hero.cms-media{background-image:linear-gradient(to bottom,transparent 180px,#000 460px),var(--cms-hero-mobile,url('assets/figma-hero-mobile-clean.png'))}
+  .story.cms-media{background-image:linear-gradient(to bottom,transparent 280px,#000 470px),var(--cms-story-mobile,url('assets/story-mobile.webp'))}
+}
+@media(min-width:601px){
+  .story.cms-media{background-image:var(--cms-story-desktop,url('assets/figma-story-background.png'))}
+}

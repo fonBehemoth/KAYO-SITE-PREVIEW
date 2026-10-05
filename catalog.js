@@ -118,7 +118,7 @@
     section: 'protection',
   }));
 
-  const products = [
+  const staticProducts = [
     { title: 'KRFP 200 BLACK', image: 'catalog-equipment/krfp-200', section: 'equipment' },
     { title: 'KRFP 202 BLACK / RED', image: 'catalog-equipment/krfp-202', section: 'equipment' },
     { title: 'KRFP 204 BLACK', image: 'catalog-equipment/krfp-204', section: 'equipment' },
@@ -129,6 +129,8 @@
     ...protectionProducts,
   ];
 
+  const cms = window.KayoCms || {};
+  const products = cms.catalogManaged ? (cms.products || []) : staticProducts;
   const gloveLabel = (key) => (gloveLabels[i18n.locale] || gloveLabels.en)[key] || gloveLabels.en[key];
   const protectionLabel = (key) => (protectionLabels[i18n.locale] || protectionLabels.en)[key] || protectionLabels.en[key];
   const gloveModelCount = (count) => {
@@ -144,6 +146,8 @@
     return `${count} ${forms[i18n.locale] || forms.en}`;
   };
   const gloveDescription = (product) => {
+    const edited = product.description?.[i18n.locale] || product.description?.en;
+    if (edited) return edited;
     const localeCopy = gloveDescriptions[i18n.locale] || gloveDescriptions.en;
     return localeCopy[product.copy] || gloveDescriptions.en[product.copy] || gloveLabel('descriptionPending');
   };
@@ -205,11 +209,11 @@
     sizes.hidden = !product.variants?.length;
     sizes.querySelector('strong').textContent = gloveLabel('availableSizes');
     sizes.querySelector('p').textContent = product.variants?.join(' · ') || '';
-    modal.querySelector('.product-modal-note').textContent = product.section === 'gloves'
+    modal.querySelector('.product-modal-note').textContent = (product.description?.[i18n.locale] || product.description?.en) || (product.section === 'gloves'
       ? gloveDescription(product)
       : product.section === 'protection'
         ? protectionLabel('descriptionPending')
-        : gloveLabel('descriptionPending');
+        : gloveLabel('descriptionPending'));
     modal.querySelectorAll('[data-modal-close]').forEach((button) => {
       button.setAttribute('aria-label', gloveLabel('close'));
     });
@@ -270,9 +274,9 @@
 
     const subcategories = document.querySelector('.catalog-subcategories');
     const subsectionConfig = active.slug === 'gloves'
-      ? { sections: gloveSections, products: gloveProducts, label: gloveLabel, assetFolder: 'catalog-gloves', allLabel: 'allGloves' }
+      ? { sections: gloveSections, products: products.filter((product) => product.section === 'gloves'), label: gloveLabel, assetFolder: 'catalog-gloves', allLabel: 'allGloves' }
       : active.slug === 'protection'
-        ? { sections: protectionSections, products: protectionProducts, label: protectionLabel, assetFolder: 'catalog-protection', allLabel: 'allProtection' }
+        ? { sections: protectionSections, products: products.filter((product) => product.section === 'protection'), label: protectionLabel, assetFolder: 'catalog-protection', allLabel: 'allProtection' }
         : null;
     subcategories.hidden = !subsectionConfig;
     subcategories.replaceChildren();
@@ -320,7 +324,7 @@
       card.className = 'catalog-product';
       if (product.variants) card.dataset.variants = product.variants.join(',');
       const image = document.createElement('img');
-      image.src = `assets/${product.image}.webp`;
+      image.src = product.imageUrl || `assets/${product.image}.webp`;
       image.alt = titleText;
       image.loading = 'lazy';
       const info = document.createElement('div');
