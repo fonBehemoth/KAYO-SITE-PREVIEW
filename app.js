@@ -18,15 +18,16 @@ if(categorySlug){
 let saved='en';try{saved=localStorage.getItem('kayo-language')||'en'}catch{}saved=supported.includes(saved)?saved:'en';
 const en=dictionaries.en;let current=dictionaries[saved]||en;const t=key=>typeof current[key]==='string'&&current[key].trim()?current[key]:en[key]||'TBD';
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n};
-const asset=(name)=>{const im=node('img');im.src=mediaUrl(name);im.alt='';return im};
+const asset=(name)=>{const im=node('img');im.src=mediaUrl(name);im.alt='';im.decoding='async';if(name!=='logo')im.loading='lazy';return im};
 const marqueeTrack=document.querySelector('.marquee-track');
-if(marqueeTrack){
+if(marqueeTrack && !marqueeTrack.children.length){
  for(let groupIndex=0;groupIndex<2;groupIndex++){
   const group=node('div','marquee-group');
   for(let i=0;i<12;i++)group.append(asset('logo'));
   marqueeTrack.append(group);
  }
 }
+const setMedia=(element,attribute,url)=>{if(element&&element.getAttribute(attribute)!==url)element.setAttribute(attribute,url)};
 function render(){
  document.querySelectorAll('[data-t]').forEach(n=>n.textContent=t(n.dataset.t));
  document.querySelectorAll('[data-placeholder]').forEach(n=>n.placeholder=t(n.dataset.placeholder));
@@ -37,11 +38,53 @@ function render(){
   const categoryPages=['category-gloves.html','category-protection.html','category-equipment.html','category-bags.html','category-accessories.html'];
   const categoryImages=['category-gloves-promo','category-protection-promo','category-equipment-promo','category-bags-promo','product-2'];
   const categoryMobileImages=['category-gloves-promo-mobile','category-protection-promo-mobile','category-equipment-promo-mobile','category-bags-promo-mobile','product-2'];
-  cats.replaceChildren();
-  for(let i=0;i<slugs.length;i++){const c=node('a','category');c.id=`category-${slugs[i]}`;c.href=categoryPages[i];const h=node('h3');h.append(node('span','',t(`cat${i === 4 ? 6 : i}a`)),node('em','',t(`cat${i === 4 ? 6 : i}b`)));const b=node('div','category-body'),pic=node('picture'),src=node('source');src.media='(max-width:600px)';src.srcset=mediaUrl(i===4?'category-accessories-promo-mobile':categoryMobileImages[i],`assets/${categoryMobileImages[i]}.webp`);const image=node('img');image.src=mediaUrl(i===4?'category-accessories-promo':categoryImages[i],`assets/${categoryImages[i]}.webp`);image.alt='';pic.append(src,image);const copy=node('div','category-copy');copy.append(node('p','',t(`cat${i === 4 ? 6 : i}desc`)),node('span','category-cta',t('details')));b.append(pic,copy);c.append(h,b);cats.append(c)}
+  const existing=[...cats.children];
+  if(existing.length!==slugs.length||existing.some((card,i)=>card.id!==`category-${slugs[i]}`)){
+   cats.replaceChildren(...slugs.map((slug,i)=>{
+    const card=node('a','category');card.id=`category-${slug}`;card.href=categoryPages[i];
+    const heading=node('h3');heading.append(node('span'),node('em'));
+    const body=node('div','category-body'),picture=node('picture'),source=node('source');source.media='(max-width:600px)';
+    picture.append(source,asset(categoryImages[i]));
+    const copy=node('div','category-copy');copy.append(node('p'),node('span','category-cta'));
+    body.append(picture,copy);card.append(heading,body);return card;
+   }));
+  }
+  [...cats.children].forEach((card,i)=>{
+   const key=i===4?6:i;
+   card.querySelector('h3 span').textContent=t(`cat${key}a`);
+   card.querySelector('h3 em').textContent=t(`cat${key}b`);
+   card.querySelector('.category-copy p').textContent=t(`cat${key}desc`);
+   card.querySelector('.category-cta').textContent=t('details');
+   setMedia(card.querySelector('picture source'),'srcset',mediaUrl(i===4?'category-accessories-promo-mobile':categoryMobileImages[i],`assets/${categoryMobileImages[i]}.webp`));
+   setMedia(card.querySelector('picture img'),'src',mediaUrl(i===4?'category-accessories-promo':categoryImages[i],`assets/${categoryImages[i]}.webp`));
+   card.querySelector('picture img').loading='lazy';
+  });
  }
- for(const [id,count,prefix] of [['hit-cards',8,'product'],['sale-cards',4,'sale']]){const grid=document.getElementById(id);if(!grid)continue;grid.replaceChildren();for(let i=0;i<count;i++){const c=node('article','product'),info=node('div','product-info'),action=node('div','product-action');action.append(node('span','yellow',t('details')));info.append(node('p','',t(`${prefix}${i}`)),action);c.append(asset(`${prefix}-${i}`),info);grid.append(c)}}
- const grid=document.querySelector('.benefit-grid');if(grid){grid.replaceChildren();for(let i=0;i<6;i++){const c=node('article','benefit');c.append(asset(`benefit-${i}`),node('h3','',t(`benefit${i}`)),node('p','',t(`benefit${i}desc`)));grid.append(c)}}
+ for(const [id,count,prefix] of [['hit-cards',8,'product'],['sale-cards',4,'sale']]){
+  const grid=document.getElementById(id);if(!grid)continue;
+  if(grid.children.length!==count)grid.replaceChildren(...Array.from({length:count},(_,i)=>{
+   const card=node('article','product'),info=node('div','product-info'),action=node('div','product-action');
+   action.append(node('span','yellow'));info.append(node('p'),action);card.append(asset(`${prefix}-${i}`),info);return card;
+  }));
+  [...grid.children].forEach((card,i)=>{
+   setMedia(card.querySelector('img'),'src',mediaUrl(`${prefix}-${i}`));
+   card.querySelector('img').loading='lazy';
+   card.querySelector('.product-info p').textContent=t(`${prefix}${i}`);
+   card.querySelector('.product-action span').textContent=t('details');
+  });
+ }
+ const benefits=document.querySelector('.benefit-grid');
+ if(benefits){
+  if(benefits.children.length!==6)benefits.replaceChildren(...Array.from({length:6},(_,i)=>{
+   const card=node('article','benefit');card.append(asset(`benefit-${i}`),node('h3'),node('p'));return card;
+  }));
+  [...benefits.children].forEach((card,i)=>{
+   setMedia(card.querySelector('img'),'src',mediaUrl(`benefit-${i}`));
+   card.querySelector('img').loading='lazy';
+   card.querySelector('h3').textContent=t(`benefit${i}`);
+   card.querySelector('p').textContent=t(`benefit${i}desc`);
+  });
+ }
  document.dispatchEvent(new CustomEvent('kayo:localechange',{detail:{locale:document.documentElement.lang}}));
 }
 function select(locale,persist=true){locale=supported.includes(locale)?locale:'en';current=dictionaries[locale]||en;document.documentElement.lang=locale;document.querySelector('#language').value=locale.toUpperCase();render();if(persist)try{localStorage.setItem('kayo-language',locale)}catch{}}

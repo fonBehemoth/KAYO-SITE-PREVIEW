@@ -12,3 +12,24 @@
 .kayo-gallery-thumbnail:focus-visible{outline:2px solid #111;outline-offset:1px}
 .kayo-gallery-thumbnail img{display:block;width:100%;height:100%;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain}
 @media(max-width:700px){.product-modal-media.kayo-gallery{height:auto;min-height:0;padding:20px 12px 12px;gap:8px}.kayo-gallery-stage{height:min(37vh,420px)}.kayo-gallery-prev,.kayo-gallery-next{width:34px;height:34px;font-size:27px}.kayo-gallery-thumbnails{width:100%;justify-content:flex-start}.kayo-gallery-thumbnail{flex-basis:48px;width:48px;height:48px}.product-modal-content{min-height:0}}
+.kayo-gallery-stage>img{cursor:zoom-in}
+.kayo-gallery-stage>img:focus-visible{outline:3px solid #ffce00;outline-offset:-3px}
+.kayo-zoom[hidden]{display:none}
+.kayo-zoom{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:16px}
+.kayo-zoom-backdrop{position:absolute;inset:0;border:0;background:rgba(0,0,0,.92)}
+.kayo-zoom-dialog{position:relative;display:flex;flex-direction:column;width:min(100%,1400px);height:100%;max-height:100%;background:#111;color:#fff;border:1px solid #444;border-radius:8px;overflow:hidden}
+.kayo-zoom-toolbar,.kayo-zoom-navigation{position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:10px 14px}
+.kayo-zoom-toolbar{justify-content:flex-end}.kayo-zoom-counter{margin-right:auto;font:16px Arial,sans-serif}
+.kayo-zoom button:not(.kayo-zoom-backdrop){min-height:44px;border:1px solid #777;border-radius:6px;background:#1c1c1c;color:#fff;padding:8px 14px;cursor:pointer}
+.kayo-zoom button:hover,.kayo-zoom button:focus-visible{border-color:#ffce00;outline:2px solid #ffce00;outline-offset:2px}
+.kayo-zoom-close{width:44px;min-width:44px;position:relative}
+.kayo-zoom-close span:before,.kayo-zoom-close span:after{content:'';position:absolute;left:12px;top:20px;width:18px;height:2px;background:#fff;transform:rotate(45deg)}
+.kayo-zoom-close span:after{transform:rotate(-45deg)}
+.kayo-zoom-viewport{flex:1;min-height:0;overflow:auto;background:#050505;touch-action:auto}
+.kayo-zoom-viewport img{display:block;width:100%;height:100%;object-fit:contain;cursor:zoom-in}
+.kayo-zoom.is-zoomed .kayo-zoom-viewport img{width:200%;height:auto;min-height:100%;max-width:none;max-height:none;cursor:grab}
+.kayo-zoom.is-zoomed .kayo-zoom-viewport img:active{cursor:grabbing}
+.kayo-zoom-navigation{justify-content:space-between}
+.kayo-zoom-navigation button[hidden]{display:none}
+body.zoom-open{overflow:hidden}
+@media(max-width:700px){.kayo-zoom{padding:0}.kayo-zoom-dialog{border:0;border-radius:0}.kayo-zoom-toolbar,.kayo-zoom-navigation{padding:8px 12px}.kayo-zoom-toggle{font-size:14px}}

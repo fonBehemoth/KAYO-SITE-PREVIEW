@@ -241,6 +241,7 @@
 
   function renderCatalog() {
     const active = activeSection();
+    document.documentElement.dataset.catalogInitialSection = active.slug || '';
     const gloveSection = activeGloveSection();
     const protectionSection = activeProtectionSection();
     let visibleProducts = active.slug ? products.filter((product) => product.section === active.slug) : products;
@@ -322,11 +323,13 @@
         : sectionTitle(sections.find((section) => section.slug === product.section));
       const card = document.createElement('article');
       card.className = 'catalog-product';
+      card.dataset.section = product.section;
       if (product.variants) card.dataset.variants = product.variants.join(',');
       const image = document.createElement('img');
       image.src = product.imageUrl || `assets/${product.image}.webp`;
       image.alt = titleText;
       image.loading = 'lazy';
+      image.decoding = 'async';
       const info = document.createElement('div');
       info.className = 'catalog-product-info';
       const category = document.createElement('p');

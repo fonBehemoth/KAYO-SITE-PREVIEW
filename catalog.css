@@ -66,3 +66,8 @@
 /* Keep the rounded media edge on a white layer so browser antialiasing cannot expose dark corner pixels. */
 .catalog-product{background:#fff;isolation:isolate}
 .catalog-product>img{position:relative;z-index:1;border-radius:8px 8px 0 0;background-clip:padding-box;clip-path:inset(0 round 8px 8px 0 0)}
+html[data-catalog-initial-section="gloves"] .catalog-grid .catalog-product:not([data-section="gloves"]),
+html[data-catalog-initial-section="protection"] .catalog-grid .catalog-product:not([data-section="protection"]),
+html[data-catalog-initial-section="equipment"] .catalog-grid .catalog-product:not([data-section="equipment"]),
+html[data-catalog-initial-section="bags"] .catalog-grid .catalog-product:not([data-section="bags"]),
+html[data-catalog-initial-section="accessories"] .catalog-grid .catalog-product:not([data-section="accessories"]){display:none}
