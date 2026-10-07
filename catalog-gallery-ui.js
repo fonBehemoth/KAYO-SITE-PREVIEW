@@ -201,9 +201,9 @@
     media.classList.add('kayo-gallery');
     media.innerHTML = `
       <div class="kayo-gallery-stage">
-        <button class="kayo-gallery-prev" type="button" aria-label="Previous photo">‹</button>
+        <button class="kayo-gallery-prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5.5 9 12l6.5 6.5"/></svg></button>
         <img alt="">
-        <button class="kayo-gallery-next" type="button" aria-label="Next photo">›</button>
+        <button class="kayo-gallery-next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.5 15 12l-6.5 6.5"/></svg></button>
         <span class="kayo-gallery-counter" aria-live="polite"></span>
       </div>
       <div class="kayo-gallery-thumbnails" aria-label="Product photos"></div>`;

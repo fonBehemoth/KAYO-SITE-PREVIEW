@@ -135,6 +135,25 @@ body>header{position:sticky!important;top:0;z-index:200}
   .ring-mark{z-index:2;right:5%;top:7%}
 }
 
+/* Keep the story label and social artwork on the same left edge. The source artwork has a black matte. */
+.story-copy{text-align:left}
+.story picture img{display:block;mix-blend-mode:screen;margin-left:0}
+.social-footer{text-align:left}
+.social-footer img{display:block;margin-left:-3px}
+@media(max-width:600px){.social-footer img{margin-inline:auto}}
+
+.privacy-trigger{border:0;padding:0;background:none;color:#ffce00;font-size:inherit;cursor:pointer}
+.privacy-trigger:hover{text-decoration:underline}
+.privacy-open{overflow:hidden}
+.privacy-modal{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:20px}
+.privacy-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.78)}
+.privacy-dialog{position:relative;width:min(100%,660px);max-height:min(80vh,760px);overflow:auto;border:1px solid #6b6b6b;border-radius:10px;padding:32px;background:#202020;color:#fff;box-shadow:0 20px 55px #000a}
+.privacy-dialog h2{max-width:calc(100% - 46px);font-size:30px;line-height:1.2;margin-bottom:22px}
+.privacy-copy p{font-size:17px;line-height:1.5;margin-top:14px}
+.privacy-close{position:absolute;top:18px;right:18px;width:40px;height:40px;border:1px solid #999;border-radius:50%;background:#000;color:#fff;font:30px/1 Arial,sans-serif;cursor:pointer}
+.privacy-close:hover,.privacy-close:focus-visible{border-color:#ffce00;color:#ffce00}
+@media(max-width:600px){.privacy-dialog{padding:24px}.privacy-dialog h2{font-size:25px}.privacy-copy p{font-size:16px}}
+
 /* Only uploaded editorial images override the approved static artwork. */
 @media(min-width:1281px){
   .hero.cms-media{background-image:var(--cms-hero-desktop,url('assets/figma-hero-background-clean.webp'))}
@@ -149,3 +168,9 @@ body>header{position:sticky!important;top:0;z-index:200}
 @media(min-width:601px){
   .story.cms-media{background-image:var(--cms-story-desktop,url('assets/figma-story-background.webp'))}
 }
+
+/* Make the current section visible in the shared desktop and mobile navigation. */
+header nav.site-nav > a.is-current,
+header nav.site-nav .catalog-main-link.is-current{color:#ffce00;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:7px}
+header nav.site-nav .catalog-dropdown a.is-current{background:#ffce00;color:#000;text-decoration:none}
+@media(max-width:1000px){header.menu-open>nav.site-nav{transform:none}}
