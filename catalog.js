@@ -133,6 +133,17 @@
   const products = cms.catalogManaged ? (cms.products || []) : staticProducts;
   const gloveLabel = (key) => (gloveLabels[i18n.locale] || gloveLabels.en)[key] || gloveLabels.en[key];
   const protectionLabel = (key) => (protectionLabels[i18n.locale] || protectionLabels.en)[key] || protectionLabels.en[key];
+  const detailLabels = {
+    en: ['Specifications', 'Name', 'Category', 'Article number', 'Size', 'Age group', 'Features', 'Material', 'Colour', 'Gross weight', 'Length', 'Width', 'Height', 'Description'],
+    uk: ['Характеристики', 'Найменування', 'Категорія', 'Артикул', 'Розмір', 'Вікова група', 'Особливості', 'Матеріал', 'Колір', 'Вага брутто', 'Довжина', 'Ширина', 'Висота', 'Опис'],
+    cs: ['Parametry', 'Název', 'Kategorie', 'Kód výrobku', 'Velikost', 'Věková skupina', 'Vlastnosti', 'Materiál', 'Barva', 'Hrubá hmotnost', 'Délka', 'Šířka', 'Výška', 'Popis'],
+    pl: ['Specyfikacja', 'Nazwa', 'Kategoria', 'Numer artykułu', 'Rozmiar', 'Grupa wiekowa', 'Cechy', 'Materiał', 'Kolor', 'Waga brutto', 'Długość', 'Szerokość', 'Wysokość', 'Opis'],
+    de: ['Eigenschaften', 'Name', 'Kategorie', 'Artikelnummer', 'Größe', 'Altersgruppe', 'Merkmale', 'Material', 'Farbe', 'Bruttogewicht', 'Länge', 'Breite', 'Höhe', 'Beschreibung'],
+    fr: ['Caractéristiques', 'Nom', 'Catégorie', 'Référence', 'Taille', 'Tranche d’âge', 'Caractéristiques', 'Matière', 'Couleur', 'Poids brut', 'Longueur', 'Largeur', 'Hauteur', 'Description'],
+    es: ['Características', 'Nombre', 'Categoría', 'Referencia', 'Talla', 'Grupo de edad', 'Características', 'Material', 'Color', 'Peso bruto', 'Largo', 'Ancho', 'Alto', 'Descripción'],
+  };
+  const detailLabel = (index) => (detailLabels[i18n.locale] || detailLabels.en)[index];
+  const localizedSpecification = (value) => typeof value === 'string' ? value : value?.[i18n.locale] || value?.en || '';
   const gloveModelCount = (count) => {
     const forms = {
       en: count === 1 ? 'model' : 'models',
@@ -183,11 +194,14 @@
         <div class="product-modal-content">
           <p class="product-modal-category"></p>
           <h2 id="product-modal-title"></h2>
-          <div class="product-modal-sizes">
-            <strong></strong>
-            <p></p>
-          </div>
-          <p class="product-modal-note"></p>
+          <section class="product-modal-specifications" aria-labelledby="product-modal-specifications-title">
+            <h3 id="product-modal-specifications-title"></h3>
+            <dl></dl>
+          </section>
+          <section class="product-modal-description" aria-labelledby="product-modal-description-title">
+            <h3 id="product-modal-description-title"></h3>
+            <p class="product-modal-note"></p>
+          </section>
         </div>
       </section>`;
     modal.addEventListener('click', (event) => {
@@ -207,10 +221,26 @@
     window.KayoGalleryUI.update(modal, product, titleText, i18n.locale);
     modal.querySelector('.product-modal-category').textContent = categoryText;
     modal.querySelector('#product-modal-title').textContent = titleText;
-    const sizes = modal.querySelector('.product-modal-sizes');
-    sizes.hidden = !product.variants?.length;
-    sizes.querySelector('strong').textContent = gloveLabel('availableSizes');
-    sizes.querySelector('p').textContent = product.variants?.join(' · ') || '';
+    const specifications = product.specifications || {};
+    const rows = [
+      titleText, categoryText, specifications.article,
+      product.variants?.join(' · '), localizedSpecification(specifications.ageGroup),
+      localizedSpecification(specifications.features), localizedSpecification(specifications.material),
+      localizedSpecification(specifications.color), specifications.grossWeight,
+      specifications.length, specifications.width, specifications.height,
+    ];
+    const list = modal.querySelector('.product-modal-specifications dl');
+    list.replaceChildren(...rows.map((value, index) => {
+      const row = document.createElement('div');
+      const term = document.createElement('dt');
+      const definition = document.createElement('dd');
+      term.textContent = detailLabel(index + 1);
+      definition.textContent = typeof value === 'string' && value.trim() ? value.trim() : '—';
+      row.append(term, definition);
+      return row;
+    }));
+    modal.querySelector('#product-modal-specifications-title').textContent = detailLabel(0);
+    modal.querySelector('#product-modal-description-title').textContent = detailLabel(13);
     modal.querySelector('.product-modal-note').textContent = (product.description?.[i18n.locale] || product.description?.en) || (product.section === 'gloves'
       ? gloveDescription(product)
       : product.section === 'protection'

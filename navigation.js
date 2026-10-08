@@ -47,6 +47,16 @@
     ] },
   };
   let privacyOpener = null;
+  let subscribeOpener = null;
+  const subscribeCopy = {
+    en: { title: 'Subscribe to KAYO news', email: 'Email address', consent: 'I would like to receive KAYO news by email.', note: 'Preview form: no information is sent or saved yet.', submit: 'Subscribe', pending: 'The form is ready, but no request was sent. Email delivery will be connected later.', close: 'Close' },
+    uk: { title: 'Підписка на новини KAYO', email: 'Електронна пошта', consent: 'Хочу отримувати новини KAYO електронною поштою.', note: 'Попередня форма: дані поки не надсилаються і не зберігаються.', submit: 'Підписатись', pending: 'Форма готова, але заявку не надіслано. Надсилання підключимо пізніше.', close: 'Закрити' },
+    cs: { title: 'Odběr novinek KAYO', email: 'E-mailová adresa', consent: 'Chci dostávat novinky KAYO e-mailem.', note: 'Ukázkový formulář: údaje se zatím neodesílají ani neukládají.', submit: 'Odebírat', pending: 'Formulář je připraven, ale žádost nebyla odeslána. Odesílání připojíme později.', close: 'Zavřít' },
+    pl: { title: 'Subskrypcja nowości KAYO', email: 'Adres e-mail', consent: 'Chcę otrzymywać nowości KAYO e-mailem.', note: 'Formularz demonstracyjny: dane nie są jeszcze wysyłane ani zapisywane.', submit: 'Zapisz się', pending: 'Formularz jest gotowy, ale zgłoszenie nie zostało wysłane. Wysyłkę podłączymy później.', close: 'Zamknij' },
+    de: { title: 'KAYO Neuigkeiten abonnieren', email: 'E-Mail-Adresse', consent: 'Ich möchte KAYO Neuigkeiten per E-Mail erhalten.', note: 'Vorschauformular: Daten werden noch nicht gesendet oder gespeichert.', submit: 'Abonnieren', pending: 'Das Formular ist bereit, aber die Anmeldung wurde nicht versendet. Der Versand wird später eingerichtet.', close: 'Schließen' },
+    fr: { title: 'S’abonner aux actualités KAYO', email: 'Adresse e-mail', consent: 'Je souhaite recevoir les actualités KAYO par e-mail.', note: 'Formulaire de démonstration : aucune donnée n’est encore envoyée ni enregistrée.', submit: 'S’abonner', pending: 'Le formulaire est prêt, mais la demande n’a pas été envoyée. L’envoi sera ajouté plus tard.', close: 'Fermer' },
+    es: { title: 'Suscribirse a las noticias de KAYO', email: 'Correo electrónico', consent: 'Quiero recibir noticias de KAYO por correo electrónico.', note: 'Formulario de prueba: los datos todavía no se envían ni se guardan.', submit: 'Suscribirse', pending: 'El formulario está listo, pero la solicitud no se ha enviado. El envío se añadirá más adelante.', close: 'Cerrar' },
+  };
 
   const locale = () => {
     const selected = document.querySelector('#language')?.value?.toLowerCase();
@@ -64,6 +74,7 @@
   }
 
   function enhanceNavigation() {
+    enhanceFooter();
     document.querySelectorAll('footer .footer-bottom > span:last-child').forEach((span) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -121,6 +132,36 @@
     updateLabels();
   }
 
+  function enhanceFooter() {
+    document.querySelectorAll('footer .footer-nav a[data-t="contacts"], footer .footer-nav a[href$="#contacts"]').forEach((link) => {
+      link.href = 'contact.html';
+    });
+    document.querySelectorAll('footer .footer-nav a[data-t="hits"], footer .footer-nav a[href="index.html#hits"]').forEach((link) => {
+      link.href = 'hits.html';
+      if (window.location.pathname.endsWith('/hits.html')) link.setAttribute('aria-current', 'page');
+    });
+    document.querySelectorAll('footer .contact h3').forEach((heading) => {
+      if (heading.querySelector('a')) return;
+      const link = document.createElement('a');
+      link.href = 'contact.html';
+      link.textContent = heading.textContent;
+      if (heading.hasAttribute('data-t')) link.setAttribute('data-t', heading.getAttribute('data-t'));
+      heading.replaceChildren(link);
+    });
+    document.querySelectorAll('footer .subscribe .email button').forEach((button) => {
+      button.disabled = false;
+      button.classList.add('subscribe-trigger');
+      button.setAttribute('aria-haspopup', 'dialog');
+    });
+    document.querySelectorAll('footer .social-footer > img').forEach((image) => {
+      const icons = document.createElement('div');
+      icons.className = 'social-icons';
+      icons.setAttribute('aria-label', image.alt);
+      icons.innerHTML = '<span class="social-icon social-icon--facebook" role="img" aria-label="Facebook"></span><span class="social-icon social-icon--telegram" role="img" aria-label="Telegram"></span><span class="social-icon social-icon--instagram" role="img" aria-label="Instagram"></span>';
+      image.replaceWith(icons);
+    });
+  }
+
   function updateLabels() {
     const menuLabels = labels[locale()] || labels.en;
     document.querySelectorAll('.catalog-dropdown').forEach((dropdown) => {
@@ -154,7 +195,7 @@
       : filename === 'about.html' ? 'company'
       : filename === 'contact.html' ? 'contacts'
       : filename === 'index.html' && hash === '#sales' ? 'offers'
-      : filename === 'index.html' && hash === '#contacts' ? 'where'
+      : filename === 'index.html' && hash === '#contacts' ? 'contacts'
       : '';
 
     document.querySelectorAll('header nav.site-nav').forEach((nav) => {
@@ -206,23 +247,72 @@
     modal.querySelector('.privacy-close').focus();
   }
 
+  function closeSubscribe() {
+    const modal = document.querySelector('.subscribe-modal');
+    if (!modal) return;
+    modal.remove();
+    if (!document.querySelector('.privacy-modal')) document.body.classList.remove('privacy-open');
+    subscribeOpener?.focus();
+    subscribeOpener = null;
+  }
+
+  function updateSubscribeCopy() {
+    const modal = document.querySelector('.subscribe-modal');
+    if (!modal) return;
+    const copy = subscribeCopy[locale()] || subscribeCopy.en;
+    modal.querySelector('#subscribe-title').textContent = copy.title;
+    modal.querySelector('.subscribe-dialog > p').textContent = copy.note;
+    modal.querySelector('.subscribe-email-label span').textContent = copy.email;
+    modal.querySelector('.subscribe-consent span').textContent = copy.consent;
+    modal.querySelector('.subscribe-submit').textContent = copy.submit;
+    modal.querySelector('.subscribe-close').setAttribute('aria-label', copy.close);
+  }
+
+  function openSubscribe(opener) {
+    if (document.querySelector('.subscribe-modal')) return;
+    subscribeOpener = opener;
+    const modal = document.createElement('div');
+    modal.className = 'subscribe-modal';
+    modal.innerHTML = '<div class="subscribe-backdrop"></div><section class="subscribe-dialog" role="dialog" aria-modal="true" aria-labelledby="subscribe-title" aria-describedby="subscribe-note"><button type="button" class="subscribe-close">×</button><h2 id="subscribe-title"></h2><p id="subscribe-note"></p><form class="subscribe-form"><label class="subscribe-email-label"><span></span><input type="email" name="email" autocomplete="email" required></label><label class="subscribe-consent"><input type="checkbox" name="consent" required><span></span></label><button type="submit" class="yellow subscribe-submit"></button><p class="subscribe-status" role="status" aria-live="polite"></p></form></section>';
+    document.body.append(modal);
+    document.body.classList.add('privacy-open');
+    updateSubscribeCopy();
+    modal.querySelector('input[name="email"]').value = opener.closest('.subscribe')?.querySelector('.email input')?.value || '';
+    modal.querySelector('input[name="email"]').focus();
+  }
+
   document.addEventListener('click', (event) => {
     if (!event.target.closest('.catalog-nav')) closeMenus();
     if (event.target.closest('.privacy-trigger')) openPrivacy(event.target.closest('.privacy-trigger'));
     if (event.target.closest('.privacy-close, .privacy-backdrop')) closePrivacy();
+    if (event.target.closest('.subscribe-trigger')) openSubscribe(event.target.closest('.subscribe-trigger'));
+    if (event.target.closest('.subscribe-close, .subscribe-backdrop')) closeSubscribe();
+  });
+  document.addEventListener('submit', (event) => {
+    if (!event.target.matches('.subscribe-form')) return;
+    event.preventDefault();
+    event.target.querySelector('.subscribe-status').textContent = (subscribeCopy[locale()] || subscribeCopy.en).pending;
   });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenus();
     if (event.key === 'Escape' && document.querySelector('.privacy-modal')) closePrivacy();
+    if (event.key === 'Escape' && document.querySelector('.subscribe-modal')) closeSubscribe();
     if (event.key === 'Tab' && document.querySelector('.privacy-modal')) {
       event.preventDefault();
       document.querySelector('.privacy-close').focus();
     }
+    if (event.key === 'Tab' && document.querySelector('.subscribe-modal')) {
+      const controls = [...document.querySelectorAll('.subscribe-modal button, .subscribe-modal input')];
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
   });
   document.addEventListener('change', (event) => {
-    if (event.target.matches('#language')) setTimeout(updateLabels, 0);
+    if (event.target.matches('#language')) setTimeout(() => { updateLabels(); updateSubscribeCopy(); }, 0);
   });
-  document.addEventListener('kayo:localechange', updateLabels);
+  document.addEventListener('kayo:localechange', () => { updateLabels(); updateSubscribeCopy(); });
   window.addEventListener('hashchange', updateActiveNavigation);
 
   new MutationObserver(enhanceNavigation).observe(document.body, { childList: true, subtree: true });

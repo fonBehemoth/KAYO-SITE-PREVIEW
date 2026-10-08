@@ -177,3 +177,37 @@ header nav.site-nav .catalog-main-link.is-current{color:#ffce00;text-decoration:
 header nav.site-nav .catalog-dropdown a.is-current{background:#ffce00;color:#000;text-decoration:none}
 @media(max-width:1000px){header.menu-open>nav.site-nav{transform:none}}
 .product-action a{font-size:16px;min-height:36px;padding:6px 13px;text-transform:uppercase}
+
+/* Preserve the proportions of product photos across all card sizes. */
+.product img{object-fit:contain}
+
+/* Raise the bag within the approved category photo without changing the asset. */
+#category-bags img{object-position:center 85%}
+
+footer .footer-nav a:hover,footer .footer-nav a:focus-visible,footer .contact h3 a:hover,footer .contact h3 a:focus-visible{color:#ffce00;text-decoration:underline}
+.social-icons{display:flex;align-items:center;gap:5px;width:137px;margin-left:-3px}
+.social-icon{position:relative;width:42px;height:42px;flex:none;display:block;border-radius:50%;background-image:url('assets/social-footer.webp');background-repeat:no-repeat;background-size:137px 43px}
+.social-icon--facebook{background-position:0 0}
+.social-icon--telegram{background-position:-47px 0}
+.social-icon--instagram{background-position:-95px 0}
+.social-icon::after{content:'';position:absolute;inset:0;border-radius:50%;background:#ffce00;mix-blend-mode:multiply;opacity:0;transition:opacity .15s ease}
+.social-icon:hover::after{opacity:1}
+@media(max-width:600px){.social-icons{margin-inline:auto}}
+@media(prefers-reduced-motion:reduce){.social-icon::after{transition:none}}
+
+.subscribe-trigger{cursor:pointer}
+.subscribe-modal{position:fixed;inset:0;z-index:1201;display:grid;place-items:center;padding:20px}
+.subscribe-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.78)}
+.subscribe-dialog{position:relative;width:min(100%,520px);max-height:calc(100vh - 40px);overflow:auto;border:1px solid #6b6b6b;border-radius:10px;padding:32px;background:#202020;color:#fff;box-shadow:0 20px 55px #000a}
+.subscribe-dialog h2{max-width:calc(100% - 48px);font-size:30px;line-height:1.15;margin-bottom:12px}
+.subscribe-dialog>p{font-size:16px;line-height:1.4;color:#ddd;margin-bottom:24px}
+.subscribe-close{position:absolute;top:18px;right:18px;width:40px;height:40px;border:1px solid #999;border-radius:50%;background:#000;color:#fff;font:30px/1 Arial,sans-serif;cursor:pointer}
+.subscribe-close:hover,.subscribe-close:focus-visible{border-color:#ffce00;color:#ffce00}
+.subscribe-form{display:grid;gap:18px}
+.subscribe-email-label{display:grid;gap:7px;font-size:16px}
+.subscribe-email-label input{width:100%;min-height:48px;border:1px solid #888;border-radius:6px;background:#fff;color:#111;padding:10px 13px;font-size:18px}
+.subscribe-consent{display:flex;align-items:flex-start;gap:10px;font-size:15px;line-height:1.35}
+.subscribe-consent input{width:18px;height:18px;flex:none;accent-color:#ffce00}
+.subscribe-submit{min-height:48px;padding:10px 20px;cursor:pointer;font-size:17px}
+.subscribe-status{min-height:1.4em;color:#ffce00;font-size:15px;line-height:1.4}
+@media(max-width:600px){.subscribe-dialog{padding:24px}.subscribe-dialog h2{font-size:25px}}

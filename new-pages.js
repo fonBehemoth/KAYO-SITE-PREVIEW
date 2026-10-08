@@ -39,6 +39,23 @@
     return hero(locale, 'offersTitle', 'offersLead') + `<main class="page-wrap offers-grid">${cards || `<p class="offers-empty">${empty[locale] || empty.en}</p>`}</main>`;
   }
 
+  const hitsCopy = {
+    en: ['Best sellers KAYO', 'Products selected for the best sellers collection.', 'Best seller', 'View details', 'No best sellers have been selected yet.'],
+    uk: ['Хіти продажів KAYO', 'Товари, обрані для добірки хітів продажів.', 'Хіт продажів', 'Детальніше', 'Хіти продажів поки не обрані.'],
+    cs: ['Nejprodávanější KAYO', 'Produkty vybrané do kolekce nejprodávanějších.', 'Bestseller', 'Zobrazit detail', 'Zatím nebyly vybrány žádné bestsellery.'],
+    pl: ['Bestsellery KAYO', 'Produkty wybrane do kolekcji bestsellerów.', 'Bestseller', 'Zobacz szczegóły', 'Nie wybrano jeszcze bestsellerów.'],
+    de: ['KAYO Bestseller', 'Produkte aus der ausgewählten Bestseller-Kollektion.', 'Bestseller', 'Details ansehen', 'Es wurden noch keine Bestseller ausgewählt.'],
+    fr: ['Meilleures ventes KAYO', 'Produits sélectionnés pour la collection des meilleures ventes.', 'Meilleure vente', 'Voir les détails', 'Aucune meilleure vente n’a encore été sélectionnée.'],
+    es: ['Más vendidos KAYO', 'Productos seleccionados para la colección de los más vendidos.', 'Más vendido', 'Ver detalles', 'Todavía no se han seleccionado productos destacados.'],
+  };
+
+  function hits(locale) {
+    const [title, lead, label, action, empty] = hitsCopy[locale] || hitsCopy.en;
+    const cards = (window.KayoFeatured?.list() || []).map((product) => `
+      <article class="offer-card hit-card"><img src="${escapeHtml(product.imageUrl)}" alt="${escapeHtml(product.title)}" loading="lazy" decoding="async"><div><p class="eyebrow">${escapeHtml(label)}</p><h2>${escapeHtml(product.title)}</h2><a href="${escapeHtml(product.href)}" class="offer-link">${escapeHtml(action)} <span aria-hidden="true">↗</span></a></div></article>`).join('');
+    return `<section class="sub-hero secondary-hero"><div><span>KAYO / ${escapeHtml(title)}</span><h1>${escapeHtml(title)}</h1><p>${escapeHtml(lead)}</p></div></section><main class="page-wrap offers-grid hits-grid">${cards || `<p class="offers-empty">${escapeHtml(empty)}</p>`}</main>`;
+  }
+
   function where(locale) {
     const cards = locations().map((location) => {
       const slot = Number(location.slot);
@@ -87,5 +104,5 @@
     }
   });
 
-  window.KayoPages = { render: (page, locale) => page === 'offers' ? offers(locale) : page === 'where' ? where(locale) : '' };
+  window.KayoPages = { render: (page, locale) => page === 'offers' ? offers(locale) : page === 'hits' ? hits(locale) : page === 'where' ? where(locale) : '' };
 })();
