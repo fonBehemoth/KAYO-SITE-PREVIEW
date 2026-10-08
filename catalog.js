@@ -165,6 +165,8 @@
 
   let activeModalProduct = null;
   let modalTrigger = null;
+  const linkedProductSlug = new URLSearchParams(location.search).get('product');
+  let linkedProductHandled = false;
 
   function ensureProductModal() {
     let modal = document.querySelector('.product-modal');
@@ -237,6 +239,11 @@
     activeModalProduct = null;
     modalTrigger?.focus();
     modalTrigger = null;
+    if (linkedProductSlug && new URLSearchParams(location.search).get('product') === linkedProductSlug) {
+      const url = new URL(location.href);
+      url.searchParams.delete('product');
+      history.replaceState(null, '', url);
+    }
   }
 
   function renderCatalog() {
@@ -324,6 +331,7 @@
       const card = document.createElement('article');
       card.className = 'catalog-product';
       card.dataset.section = product.section;
+      card.dataset.productSlug = product.slug || product.image.replace('/', '-');
       if (product.variants) card.dataset.variants = product.variants.join(',');
       const image = document.createElement('img');
       image.src = product.imageUrl || `assets/${product.image}.webp`;
@@ -348,6 +356,15 @@
       card.append(image, info);
       return card;
     }));
+    if (linkedProductSlug && !linkedProductHandled) {
+      linkedProductHandled = true;
+      const product = visibleProducts.find((item) => (item.slug || item.image.replace('/', '-')) === linkedProductSlug);
+      const card = [...grid.children].find((item) => item.dataset.productSlug === linkedProductSlug);
+      if (product && card) requestAnimationFrame(() => {
+        card.scrollIntoView({ block: 'center', behavior: 'auto' });
+        openProductModal(product, card.querySelector('button'));
+      });
+    }
   }
 
   addEventListener('hashchange', renderCatalog);

@@ -148,6 +148,8 @@
     const hash = window.location.hash.toLowerCase();
     const active = filename === 'catalog.html' ? 'catalog'
       : filename === 'categories.html' || filename.startsWith('category-') ? 'categories'
+      : filename === 'offers.html' ? 'offers'
+      : filename === 'where-to-buy.html' ? 'where'
       : filename === 'news.html' ? 'news'
       : filename === 'about.html' ? 'company'
       : filename === 'contact.html' ? 'contacts'

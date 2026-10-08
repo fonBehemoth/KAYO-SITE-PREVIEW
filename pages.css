@@ -3,3 +3,43 @@
 /* Preserve the arrow badges baked into the news photography at every viewport. */
 .news-card img{display:block;width:100%;height:auto;aspect-ratio:77/50;object-fit:contain;background:#111}
 @media(max-width:900px){.news-card img{height:auto}}
+
+.secondary-hero{min-height:360px;background-image:linear-gradient(90deg,rgba(0,0,0,.94) 0 42%,rgba(0,0,0,.35)),url('assets/story.webp')}
+.offers-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.offer-card{background:#282828;border:1px solid #555;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.offer-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#fff}
+.offer-card>div{display:flex;flex-direction:column;align-items:flex-start;flex:1;padding:28px}
+.offer-card .eyebrow{margin:0;color:#ffce00}
+.offer-card h2{font-size:clamp(24px,2.5vw,34px);margin:14px 0 28px}
+.offer-link,.location-select,.map-open{display:inline-flex;align-items:center;justify-content:center;gap:14px;background:#ffce00;color:#111;border:0;border-radius:8px;padding:14px 20px;font:700 18px RobotoCondensed,Arial,sans-serif;text-transform:uppercase;cursor:pointer}
+.offer-link{margin-top:auto}
+.offer-link:hover,.location-select:hover,.map-open:hover{background:#ffdd4a}
+.offer-link:focus-visible,.location-select:focus-visible,.map-open:focus-visible,.where a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.where-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,1fr);gap:32px;align-items:start}
+.location-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.location-card,.location-map{border:1px solid #555;background:linear-gradient(145deg,#141414,#292929);border-radius:12px;padding:25px}
+.location-card{min-height:235px;display:flex;flex-direction:column;align-items:flex-start}
+.location-card .eyebrow{font-size:17px}
+.location-card .location-address{min-height:52px;width:100%;border-bottom:1px solid #555;overflow-wrap:anywhere;font:700 25px/1.2 Exo2,Arial,sans-serif;margin:24px 0 14px}
+.location-card .location-description{min-height:45px;margin:0;white-space:pre-line;overflow-wrap:anywhere}
+.location-select{font-size:15px;padding:10px 13px;margin-top:auto}
+.location-map h2{font-size:30px;margin:0 0 10px}
+.location-map .map-top p{margin:0 0 22px}
+#osm-map{min-height:370px;display:grid;place-items:center;background:#202020;border:1px solid #555;border-radius:8px;overflow:hidden}
+#osm-map iframe{width:100%;height:370px;border:0}
+.map-source{display:inline-block;margin-top:12px;color:#ddd;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:1000px){.where-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.offers-grid,.location-grid{grid-template-columns:1fr}.location-card{min-height:205px}.secondary-hero{min-height:300px}.page-wrap{padding:45px 0}}
+
+.news-read{border:0;background:none;padding:0;color:#ffce00;cursor:pointer;font:700 18px RobotoCondensed,Arial,sans-serif;text-transform:uppercase}
+.news-read:hover{text-decoration:underline;text-underline-offset:4px}
+.news-read:focus-visible,.news-dialog-close:focus-visible{outline:3px solid #ffce00;outline-offset:4px}
+body.news-dialog-open{overflow:hidden}
+.news-dialog{width:min(820px,calc(100% - 32px));max-height:min(88dvh,900px);padding:0;background:#242424;color:#fff;border:1px solid #666;border-radius:12px;overflow:auto;box-shadow:0 25px 70px #000a}
+.news-dialog::backdrop{background:#000b}
+.news-dialog>img{display:block;width:100%;max-height:300px;object-fit:contain;background:#111}
+.news-dialog-content{padding:30px 36px 38px}
+.news-dialog-content h2{font:800 clamp(28px,4vw,42px)/1.15 Exo2,Arial,sans-serif;text-transform:uppercase;margin:12px 0 22px}
+.news-dialog-content p{font-size:20px;line-height:1.55;color:#ddd}
+.news-dialog-close{position:absolute;right:18px;top:18px;width:46px;height:46px;border:0;border-radius:50%;background:#000;color:#fff;font-size:34px;line-height:1;cursor:pointer}
+@media(max-width:560px){.news-dialog-content{padding:22px}.news-dialog-content p{font-size:18px}.news-dialog>img{max-height:220px}}

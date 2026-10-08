@@ -138,6 +138,8 @@ body>header{position:sticky!important;top:0;z-index:200}
 /* Keep the story label and social artwork on the same left edge. The source artwork has a black matte. */
 .story-copy{text-align:left}
 .story picture img{display:block;mix-blend-mode:screen;margin-left:0}
+.story h2 em{display:inline-block;white-space:nowrap;color:#ffce00;font-style:normal}
+@media(max-width:600px){.story h2 em{font-size:clamp(25px,8vw,38px);letter-spacing:-.025em}}
 .social-footer{text-align:left}
 .social-footer img{display:block;margin-left:-3px}
 @media(max-width:600px){.social-footer img{margin-inline:auto}}
@@ -174,3 +176,4 @@ header nav.site-nav > a.is-current,
 header nav.site-nav .catalog-main-link.is-current{color:#ffce00;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:7px}
 header nav.site-nav .catalog-dropdown a.is-current{background:#ffce00;color:#000;text-decoration:none}
 @media(max-width:1000px){header.menu-open>nav.site-nav{transform:none}}
+.product-action a{font-size:16px;min-height:36px;padding:6px 13px;text-transform:uppercase}
