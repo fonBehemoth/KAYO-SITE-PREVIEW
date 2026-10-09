@@ -211,3 +211,5 @@ footer .footer-nav a:hover,footer .footer-nav a:focus-visible,footer .contact h3
 .subscribe-submit{min-height:48px;padding:10px 20px;cursor:pointer;font-size:17px}
 .subscribe-status{min-height:1.4em;color:#ffce00;font-size:15px;line-height:1.4}
 @media(max-width:600px){.subscribe-dialog{padding:24px}.subscribe-dialog h2{font-size:25px}}
+/* Keep the editorial headline and social artwork centred on narrow screens. */
+@media(max-width:600px){.story-copy{text-align:center}.story picture img{margin-inline:auto}}

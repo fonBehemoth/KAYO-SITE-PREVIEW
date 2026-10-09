@@ -5,6 +5,8 @@ const cms=window.KayoCms||{};
 const featuredBySlot=new Map((window.KayoFeatured?.list()||[]).map(product=>[product.slot,product]));
 for(const [locale,copy] of Object.entries(cms.copy||{}))if(dictionaries[locale])Object.assign(dictionaries[locale],copy);
 const mediaUrl=(key,fallback=`assets/${key}.webp`)=>cms.media?.[key]||fallback;
+const homeVideoPoster=document.querySelector('.video-player[data-video-slot="video-home"] > img');
+if(homeVideoPoster&&cms.media?.['video-home'])homeVideoPoster.src=cms.media['video-home'];
 for(const [selector,slot,property] of [['.hero','hero-desktop','--cms-hero-desktop'],['.hero','hero-mobile','--cms-hero-mobile'],['.story','story-desktop','--cms-story-desktop'],['.story','story-mobile','--cms-story-mobile']]){
  const element=document.querySelector(selector),url=cms.media?.[slot];
  if(element&&url){element.classList.add('cms-media');element.style.setProperty(property,`url(${JSON.stringify(url)})`)}
@@ -38,8 +40,8 @@ function render(){
  if(cats){
   const slugs=['gloves','protection','equipment','bags','accessories'];
   const categoryPages=['category-gloves.html','category-protection.html','category-equipment.html','category-bags.html','category-accessories.html'];
-  const categoryImages=['category-gloves-promo','category-protection-promo','category-equipment-promo','category-bags-promo','product-2'];
-  const categoryMobileImages=['category-gloves-promo-mobile','category-protection-promo-mobile','category-equipment-promo-mobile','category-bags-promo-mobile','product-2'];
+  const categoryImages=['category-gloves-promo','category-protection-promo','category-equipment-promo','category-bags-promo','category-accessories-promo'];
+  const categoryMobileImages=['category-gloves-promo-mobile','category-protection-promo-mobile','category-equipment-promo-mobile','category-bags-promo-mobile','category-accessories-promo-mobile'];
   const existing=[...cats.children];
   if(existing.length!==slugs.length||existing.some((card,i)=>card.id!==`category-${slugs[i]}`)){
    cats.replaceChildren(...slugs.map((slug,i)=>{
