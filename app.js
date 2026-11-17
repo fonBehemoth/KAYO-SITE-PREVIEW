@@ -63,8 +63,8 @@ function render(){
    card.querySelector('h3 em').textContent=t(`cat${key}b`);
    card.querySelector('.category-copy p').textContent=t(`cat${key}desc`);
    card.querySelector('.category-cta').textContent=t('details');
-   setMedia(card.querySelector('picture source'),'srcset',mediaUrl(categoryMobileImages[i],i===4?'assets/category-accessories-promo-mobile-20261014.webp':`assets/${categoryMobileImages[i]}.webp`));
-   setMedia(card.querySelector('picture img'),'src',mediaUrl(categoryImages[i],i===4?'assets/category-accessories-promo-20261014.webp':`assets/${categoryImages[i]}.webp`));
+   setMedia(card.querySelector('picture source'),'srcset',mediaUrl(categoryMobileImages[i],i===2?'assets/catalog-lifestyle/training-equipment-coach.webp':i===4?'assets/category-accessories-promo-mobile-20261014.webp':`assets/${categoryMobileImages[i]}.webp`));
+   setMedia(card.querySelector('picture img'),'src',mediaUrl(categoryImages[i],i===2?'assets/catalog-lifestyle/training-equipment-coach.webp':i===4?'assets/category-accessories-promo-20261014.webp':`assets/${categoryImages[i]}.webp`));
    card.querySelector('picture img').loading='lazy';
   });
  }
