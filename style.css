@@ -297,3 +297,9 @@ footer .footer-nav a:hover,footer .footer-nav a:focus-visible,footer .contact h3
 @media(prefers-reduced-motion:reduce){.product-photo-link:active img,.product-action a:active,.section-heading .outline:active,.hero-cta:active,.category:active .category-cta{transform:none}}
 
 .social-icon--tiktok{display:inline-flex;align-items:center;justify-content:center;color:inherit;background:none;mask:none;-webkit-mask:none;flex:none}.social-icons{width:184px;max-width:100%;flex-wrap:wrap}.story-social{width:250px;max-width:100%}.story-social picture{display:block;width:187px}.story-social-icon--instagram{left:137px;right:auto}.story-social [data-tiktok]{position:absolute;left:205px;top:0;width:42px;height:50px;margin:0}
+
+/* User-supplied TikTok artwork: normal and highlighted states. */
+.social-icon--tiktok{background-image:url('assets/tiktok_white.svg');background-repeat:no-repeat;background-position:center;background-size:42px 42px}
+.social-icon--tiktok::after{display:none}
+.social-icon--tiktok:focus-visible,.social-icon--tiktok:active{background-image:url('assets/tiktok_yelow.svg')}
+@media(hover:hover){.social-icon--tiktok:hover{background-image:url('assets/tiktok_yelow.svg')}}

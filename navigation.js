@@ -525,7 +525,6 @@
       icon.className = 'social-icon social-icon--tiktok'; icon.setAttribute('aria-label','TikTok');
       if (active) { icon.href = url; icon.target = '_blank'; icon.rel = 'noopener noreferrer'; }
       else { icon.setAttribute('role','img'); icon.title = 'TikTok'; }
-      icon.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M16.6 1c.3 2.6 1.7 4.1 4.4 4.3v4a10 10 0 0 1-4.4-1.3v8.1a6.9 6.9 0 1 1-6-6.8v4.1a2.9 2.9 0 1 0 2 2.7V1z"/></svg>';
       container.append(icon);
     });
   }
