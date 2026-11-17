@@ -303,3 +303,4 @@ footer .footer-nav a:hover,footer .footer-nav a:focus-visible,footer .contact h3
 .social-icon--tiktok::after{display:none}
 .social-icon--tiktok:focus-visible,.social-icon--tiktok:active{background-image:url('assets/tiktok_yelow.svg')}
 @media(hover:hover){.social-icon--tiktok:hover{background-image:url('assets/tiktok_yelow.svg')}}
+.social-icons .social-icon--tiktok{background-size:38px 38px;background-position:center calc(50% + 1px)}
