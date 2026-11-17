@@ -2,6 +2,27 @@
   const i18n = window.KayoI18n;
   if (!i18n) return;
 
+  const productWhiteCorrection = 'catalog-gloves/krbm-158-red-training';
+  const refreshedProductPhotos = new Set([
+    'catalog-equipment/krfp-200', 'catalog-equipment/krfp-202',
+    'catalog-equipment/krfp-204', 'catalog-equipment/krks-408',
+    'catalog-gloves/krbg-168-blk-slv', 'catalog-gloves/krbg-248-blc',
+    'catalog-gloves/krbg-248-wht', 'catalog-gloves/krbg-168-wht-blk',
+    'catalog-gloves/krbm-158-blue-training', 'catalog-gloves/krbm-158-red-training',
+  ]);
+  const productPhotoUrl = (key, fallback) => {
+    const url = fallback || `assets/${key}.webp`;
+    const imageKey = key || url.match(/assets\/(catalog-[a-z]+\/[a-z0-9-]+)\.webp/)?.[1];
+    if (imageKey === productWhiteCorrection) return `${url.split('?')[0]}?v=20261116-white`;
+    return refreshedProductPhotos.has(imageKey) && !/v=202611(?:12|16)-white/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=20261112-white` : url;
+  };
+  const refreshedGalleryPhotos = new Map(Object.values(window.KayoProductGallery || {}).flat()
+    .filter((url) => /v=202611(?:12|16)-white/.test(url)).map((url) => [url.split('?')[0], url]));
+  const galleryPhotoUrl = (url) => {
+    const relative = url.match(/assets\/catalog-gallery\/[a-z0-9-]+\/[0-9]{2}\.webp/)?.[0];
+    return refreshedGalleryPhotos.get(relative) || url;
+  };
+
   const sections = [
     { slug: '', keys: ['catalog'], description: 'heroSub' },
     { slug: 'gloves', keys: ['cat0a', 'cat0b'], description: 'cat0desc' },
@@ -12,6 +33,7 @@
   ];
 
   const gloveLabels = {
+    ru: {"allGloves": "Все перчатки", "boxing": "Боксерские перчатки", "mma": "Перчатки MMA", "training": "Снарядные перчатки", "kids": "Детские перчатки", "models": "моделей", "positions": "позиций", "close": "Закрыть", "availableSizes": "Доступные размеры", "descriptionPending": "Подробное описание появится после подтверждения информации о товаре."},
     en: { allGloves: 'All gloves', boxing: 'Boxing gloves', mma: 'MMA gloves', training: 'Bag gloves', kids: 'Children’s gloves', models: 'models', positions: 'positions', close: 'Close', availableSizes: 'Available sizes', descriptionPending: 'The detailed description will be added after the product information is confirmed.' },
     uk: { allGloves: 'Усі рукавиці', boxing: 'Боксерські рукавиці', mma: 'Рукавиці MMA', training: 'Снарядні рукавиці', kids: 'Дитячі рукавиці', models: 'моделей', positions: 'позицій', close: 'Закрити', availableSizes: 'Доступні розміри', descriptionPending: 'Детальний опис буде додано після підтвердження інформації про товар.' },
     cs: { allGloves: 'Všechny rukavice', boxing: 'Boxerské rukavice', mma: 'MMA rukavice', training: 'Pytlové rukavice', kids: 'Dětské rukavice', models: 'modelů', positions: 'položek', close: 'Zavřít', availableSizes: 'Dostupné velikosti', descriptionPending: 'Podrobný popis bude doplněn po potvrzení informací o výrobku.' },
@@ -23,13 +45,14 @@
 
   const gloveSections = [
     { slug: 'gloves', label: 'allGloves' },
-    { slug: 'gloves-boxing', label: 'boxing', subtype: 'boxing', image: 'krbg-165-blk-red', sizes: '4–16 oz' },
-    { slug: 'gloves-mma', label: 'mma', subtype: 'mma', image: 'krgb-161-black-mma', sizes: 'M–XL' },
-    { slug: 'gloves-training', label: 'training', subtype: 'training', image: 'krbm-158-blue-training', sizes: 'L' },
-    { slug: 'kids', label: 'kids', subtype: 'kids', image: 'krbg-241-blue-kids', sizes: '4–6 oz' },
+    { slug: 'gloves-boxing', label: 'boxing', subtype: 'boxing', image: 'krbg-165-blk-red', lifestyle: 'boxing-gloves-person', sizes: '4–16 oz' },
+    { slug: 'gloves-mma', label: 'mma', subtype: 'mma', image: 'krgb-161-black-mma', lifestyle: 'mma-gloves-person', sizes: 'M–XL' },
+    { slug: 'gloves-training', label: 'training', subtype: 'training', image: 'krbm-158-blue-training', lifestyle: 'bag-gloves', sizes: 'L' },
+    { slug: 'kids', label: 'kids', subtype: 'kids', image: 'krbg-241-blue-kids', lifestyle: 'kids-gloves', sizes: '4–6 oz' },
   ];
 
   const protectionLabels = {
+    ru: {"allProtection": "Вся защита", "mouthguards": "Капы", "wraps": "Бинты", "groin": "Бандажи", "helmets": "Шлемы", "shinguards": "Защита голени", "positions": "позиций", "descriptionPending": "Подробное описание появится после подтверждения информации о товаре."},
     en: { allProtection: 'All protection', mouthguards: 'Mouthguards', wraps: 'Hand wraps', groin: 'Groin guards', helmets: 'Head guards', shinguards: 'Shin guards', positions: 'positions', descriptionPending: 'The detailed description will be added after the product information is confirmed.' },
     uk: { allProtection: 'Увесь захист', mouthguards: 'Капи', wraps: 'Бинти', groin: 'Бандажі', helmets: 'Шоломи', shinguards: 'Захист гомілки', positions: 'позицій', descriptionPending: 'Детальний опис буде додано після підтвердження інформації про товар.' },
     cs: { allProtection: 'Veškerá ochrana', mouthguards: 'Chrániče zubů', wraps: 'Bandáže', groin: 'Suspenzory', helmets: 'Chrániče hlavy', shinguards: 'Chrániče holení', positions: 'položek', descriptionPending: 'Podrobný popis bude doplněn po potvrzení informací o výrobku.' },
@@ -41,10 +64,10 @@
 
   const protectionSections = [
     { slug: 'protection', label: 'allProtection' },
-    { slug: 'protection-mouthguards', label: 'mouthguards', subtype: 'mouthguards', image: 'krm-180-ylw' },
+    { slug: 'protection-mouthguards', lifestyle: 'mouthguards', label: 'mouthguards', subtype: 'mouthguards', image: 'krm-180-ylw' },
     { slug: 'protection-wraps', label: 'wraps', subtype: 'wraps', image: 'krep-231-red' },
     { slug: 'protection-groin', label: 'groin', subtype: 'groin', image: 'krep-213-wht' },
-    { slug: 'protection-helmets', label: 'helmets', subtype: 'helmets', image: 'krhg-162-blc-red' },
+    { slug: 'protection-helmets', label: 'helmets', subtype: 'helmets', image: 'krhg-162-blc-red', lifestyle: 'head-guard-person' },
     { slug: 'protection-shinguards', label: 'shinguards', subtype: 'shinguards', image: 'krep-250-blue' },
   ];
 
@@ -130,10 +153,14 @@
   ];
 
   const cms = window.KayoCms || {};
-  const products = cms.catalogManaged ? (cms.products || []) : staticProducts;
+  const products = cms.catalogManaged ? (cms.products || []).map((product) => ({
+    ...product,
+    images: product.images?.map(galleryPhotoUrl),
+  })) : staticProducts;
   const gloveLabel = (key) => (gloveLabels[i18n.locale] || gloveLabels.en)[key] || gloveLabels.en[key];
   const protectionLabel = (key) => (protectionLabels[i18n.locale] || protectionLabels.en)[key] || protectionLabels.en[key];
   const detailLabels = {
+    ru: ["Характеристики", "Название", "Категория", "Артикул", "Размер", "Возрастная группа", "Особенности", "Материал", "Цвет", "Вес брутто", "Длина", "Ширина", "Высота", "Описание"],
     en: ['Specifications', 'Name', 'Category', 'Article number', 'Size', 'Age group', 'Features', 'Material', 'Colour', 'Gross weight', 'Length', 'Width', 'Height', 'Description'],
     uk: ['Характеристики', 'Найменування', 'Категорія', 'Артикул', 'Розмір', 'Вікова група', 'Особливості', 'Матеріал', 'Колір', 'Вага брутто', 'Довжина', 'Ширина', 'Висота', 'Опис'],
     cs: ['Parametry', 'Název', 'Kategorie', 'Kód výrobku', 'Velikost', 'Věková skupina', 'Vlastnosti', 'Materiál', 'Barva', 'Hrubá hmotnost', 'Délka', 'Šířka', 'Výška', 'Popis'],
@@ -179,6 +206,197 @@
   const linkedProductSlug = new URLSearchParams(location.search).get('product');
   let linkedProductHandled = false;
 
+  const filterCopy = {
+    ru: ["Фильтры", "Категория", "Подкатегория / тип", "Цвет", "Размер", "Материал", "Наличие", "Все", "В наличии", "Сбросить", "Модель или артикул", "Применить", "Ничего не найдено. Измените фильтры."],
+    en: ['Filters', 'Category', 'Subcategory / type', 'Colour', 'Size', 'Material', 'Availability', 'All', 'In stock', 'Reset', 'Model or code', 'Apply', 'No products match. Try changing the filters.'],
+    uk: ['Фільтри', 'Категорія', 'Підкатегорія / тип', 'Колір', 'Розмір', 'Матеріал', 'Наявність', 'Усі', 'У наявності', 'Скинути', 'Модель або код', 'Застосувати', 'Товарів за цими умовами немає. Змініть фільтри.'],
+    cs: ['Filtry', 'Kategorie', 'Podkategorie / typ', 'Barva', 'Velikost', 'Materiál', 'Dostupnost', 'Vše', 'Skladem', 'Resetovat', 'Model nebo kód', 'Použít', 'Žádné odpovídající produkty. Změňte filtry.'],
+    pl: ['Filtry', 'Kategoria', 'Podkategoria / typ', 'Kolor', 'Rozmiar', 'Materiał', 'Dostępność', 'Wszystkie', 'Dostępne', 'Wyczyść', 'Model lub kod', 'Zastosuj', 'Brak pasujących produktów. Zmień filtry.'],
+    de: ['Filter', 'Kategorie', 'Unterkategorie / Typ', 'Farbe', 'Größe', 'Material', 'Verfügbarkeit', 'Alle', 'Auf Lager', 'Zurücksetzen', 'Modell oder Code', 'Anwenden', 'Keine passenden Produkte. Ändere die Filter.'],
+    fr: ['Filtres', 'Catégorie', 'Sous-catégorie / type', 'Couleur', 'Taille', 'Matière', 'Disponibilité', 'Tous', 'En stock', 'Réinitialiser', 'Modèle ou code', 'Appliquer', 'Aucun produit correspondant. Modifiez les filtres.'],
+    es: ['Filtros', 'Categoría', 'Subcategoría / tipo', 'Color', 'Talla', 'Material', 'Disponibilidad', 'Todos', 'En stock', 'Restablecer', 'Modelo o código', 'Aplicar', 'No hay productos que coincidan. Cambia los filtros.'],
+  };
+  const colorNames = {
+    black: ['Black', 'Чорний', 'Černá', 'Czarny', 'Schwarz', 'Noir', 'Negro'],
+    white: ['White', 'Білий', 'Bílá', 'Biały', 'Weiß', 'Blanc', 'Blanco'],
+    red: ['Red', 'Червоний', 'Červená', 'Czerwony', 'Rot', 'Rouge', 'Rojo'],
+    blue: ['Blue', 'Синій', 'Modrá', 'Niebieski', 'Blau', 'Bleu', 'Azul'],
+    yellow: ['Yellow', 'Жовтий', 'Žlutá', 'Żółty', 'Gelb', 'Jaune', 'Amarillo'],
+    silver: ['Silver', 'Сріблястий', 'Stříbrná', 'Srebrny', 'Silber', 'Argent', 'Plateado'],
+  };
+  const localeIndex = () => Math.max(0, ['en','uk','cs','pl','de','fr','es'].indexOf(i18n.locale));
+  const filterState = {};
+  for (const key of ['color','size','material','stock','q']) filterState[key] = new URL(location.href).searchParams.get(`f_${key}`)?.slice(0, 160) || '';
+  const colorsFor = product => {
+    const stored = product.filterColors;
+    if (Array.isArray(stored) && stored.length) return stored.filter(key => colorNames[key]);
+    const title = (product.title || '').toUpperCase();
+    const tokens = {black:/\b(BLACK|BLK|BLC)\b/,white:/\b(WHITE|WHT)\b/,red:/\bRED\b/,blue:/\b(BLUE|BLU)\b/,yellow:/\b(YELLOW|YLW)\b/,silver:/\b(SILVER|SLV)\b/};
+    return Object.entries(tokens).filter(([,pattern]) => pattern.test(title)).map(([key]) => key);
+  };
+  const materialFor = product => product.specifications?.material?.en || '';
+  const inStock = (product, size) => {
+    const inventory = product.inventory || {};
+    return size ? Number.isInteger(inventory[size]) && inventory[size] > 0 : Object.values(inventory).some(n => Number.isInteger(n) && n > 0);
+  };
+  function applyProductFilters(product) {
+    return (!filterState.color || colorsFor(product).includes(filterState.color))
+      && (!filterState.size || (product.variants || []).includes(filterState.size))
+      && (!filterState.material || materialFor(product) === filterState.material)
+      && (!filterState.stock || inStock(product, filterState.size))
+      && (!filterState.q || `${product.title || ''} ${product.slug || ''}`.toLocaleLowerCase().includes(filterState.q.toLocaleLowerCase()));
+  }
+  function syncFilterUrl() {
+    const url = new URL(location.href);
+    for (const [key,value] of Object.entries(filterState)) { if (value) url.searchParams.set(`f_${key}`, value); else url.searchParams.delete(`f_${key}`); }
+    history.replaceState(null, '', url);
+  }
+  const filterDialogCopy = {ru:['Закрыть фильтры','Показать товары'],en:['Close filters','Show products'],uk:['Закрити фільтри','Показати товари'],cs:['Zavřít filtry','Zobrazit produkty'],pl:['Zamknij filtry','Pokaż produkty'],de:['Filter schließen','Produkte anzeigen'],fr:['Fermer les filtres','Afficher les produits'],es:['Cerrar filtros','Mostrar productos']};
+  let filterDialogOpen = false;
+  function renderFilters(active, subsection) {
+    const labels = filterCopy[i18n.locale] || filterCopy.en;
+    document.querySelector('.catalog-filters')?.remove();
+    const previousDialog = document.querySelector('.catalog-filter-dialog');
+    if (previousDialog?.open) previousDialog.close();
+    previousDialog?.remove();
+    const panel = document.createElement('div'); panel.className = 'catalog-filters';
+    const summary = document.createElement('button'); summary.type = 'button'; summary.className = 'catalog-filter-toggle'; summary.textContent = labels[0];summary.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="8" cy="6" r="2" fill="#ffb000"/><circle cx="16" cy="12" r="2" fill="#ffb000"/><circle cx="10" cy="18" r="2" fill="#ffb000"/></svg>'); summary.setAttribute('aria-haspopup','dialog'); summary.setAttribute('aria-expanded', String(filterDialogOpen)); panel.append(summary);
+    const dialog = document.createElement('dialog'); dialog.className = 'catalog-filter-dialog'; dialog.setAttribute('aria-labelledby','catalog-filter-title');
+    const header = document.createElement('header');
+    const heading = document.createElement('h2'); heading.id = 'catalog-filter-title'; heading.textContent = labels[0];
+    const close = document.createElement('button'); close.type = 'button'; close.textContent = '×'; close.setAttribute('aria-label',(filterDialogCopy[i18n.locale] || filterDialogCopy.en)[0]); header.append(heading,close); dialog.append(header);
+    const closeDialog = () => {filterDialogOpen = false; dialog.close(); summary.setAttribute('aria-expanded','false'); summary.focus();};
+    close.addEventListener('click',closeDialog);
+    dialog.addEventListener('cancel', e => { e.preventDefault(); closeDialog(); });
+    dialog.addEventListener('click',e=>{const r=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))closeDialog();});
+    summary.addEventListener('click',()=>{filterDialogOpen=true; summary.setAttribute('aria-expanded','true'); dialog.showModal();});
+    const form = document.createElement('form'); form.className = 'catalog-filter-fields';
+    const select = (key, label, options, value, changed) => {
+      const wrapper = document.createElement('label'); wrapper.textContent = label;
+      const input = document.createElement('select'); input.name = key; input.dataset.filterKey = key;
+      const all = document.createElement('option'); all.value = ''; all.textContent = labels[7]; input.append(all);
+      for (const [id,text] of options) { const option = document.createElement('option'); option.value = id; option.textContent = text; input.append(option); }
+      if (value && !options.some(([id]) => id === value)) { const saved = document.createElement('option'); saved.value = value; saved.textContent = value; input.append(saved); }
+      input.value = value;
+      input.addEventListener('change', () => { changed(input.value); syncFilterUrl(); renderCatalog(); document.querySelector(`[data-filter-key="${key}"]`)?.focus(); });
+      wrapper.append(input); form.append(wrapper);
+    };
+    select('category', labels[1], sections.filter(s=>s.slug).map(s=>[s.slug, sectionTitle(s)]), active.slug, value => { const url = new URL(location.href); url.hash = value; history.replaceState(null,'',url); });
+    const subs = active.slug === 'gloves' ? gloveSections.filter(s=>s.subtype) : active.slug === 'protection' ? protectionSections.filter(s=>s.subtype) : [...gloveSections,...protectionSections].filter(s=>s.subtype);
+    select('type', labels[2], subs.map(s=>[s.slug, s.slug.startsWith('protection') ? protectionLabel(s.label) : gloveLabel(s.label)]), subsection?.subtype ? subsection.slug : '', value => { const url = new URL(location.href); url.hash = value || active.slug; history.replaceState(null,'',url); });
+    const base = products.filter(p=>(!active.slug || p.section===active.slug) && (!subsection?.subtype || p.subtype===subsection.subtype));
+    const unique = values => [...new Set(values)].filter(Boolean).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+    select('color',labels[3],unique(base.flatMap(colorsFor)).map(c=>[c,colorNames[c][localeIndex()]]),filterState.color,v=>filterState.color=v);
+    select('size',labels[4],unique(base.flatMap(p=>p.variants||[])).map(s=>[s,s]),filterState.size,v=>filterState.size=v);
+    select('material',labels[5],unique(base.map(materialFor)).map(m=>[m,base.find(p=>materialFor(p)===m)?.specifications?.material?.[i18n.locale]||m]),filterState.material,v=>filterState.material=v);
+    select('stock',labels[6],[['yes',labels[8]]],filterState.stock,v=>filterState.stock=v);
+    const searchLabel=document.createElement('label');searchLabel.textContent=labels[10];const search=document.createElement('input');search.type='search';search.maxLength=160;search.name='q';search.value=filterState.q;searchLabel.append(search);form.append(searchLabel);
+    const show=document.createElement('button');show.type='submit';show.className='catalog-filter-show';show.textContent=(filterDialogCopy[i18n.locale]||filterDialogCopy.en)[1];
+    const reset=document.createElement('button');reset.type='button';reset.textContent=labels[9];reset.addEventListener('click',()=>{Object.keys(filterState).forEach(k=>filterState[k]='');syncFilterUrl();const url=new URL(location.href);url.hash='';history.replaceState(null,'',url);renderCatalog();document.querySelector('[data-filter-key="category"]')?.focus();});form.append(reset);
+    form.addEventListener('submit',e=>{e.preventDefault();filterState.q=search.value.trim();syncFilterUrl();filterDialogOpen=false;renderCatalog();document.querySelector('.catalog-filter-toggle')?.focus();});
+    form.append(show); dialog.append(form); document.body.append(dialog); document.querySelector('.catalog-toolbar').before(panel);
+    if (filterDialogOpen) dialog.showModal();
+    const counter=document.querySelector('[data-catalog-count]'); counter.setAttribute('aria-live','polite');
+    document.querySelector('.catalog-empty').textContent=labels[12];
+  }
+
+  const personalLabels = {
+    ru: ["Недавно просмотренные", "Избранное", "Добавить в избранное", "Удалить из избранного"],
+    en: ['Recently viewed', 'Favourites', 'Save to favourites', 'Remove from favourites'],
+    uk: ['Нещодавно переглянуті', 'Обране', 'Додати до обраного', 'Видалити з обраного'],
+    cs: ['Nedávno prohlížené', 'Oblíbené', 'Přidat do oblíbených', 'Odebrat z oblíbených'],
+    pl: ['Ostatnio oglądane', 'Ulubione', 'Dodaj do ulubionych', 'Usuń z ulubionych'],
+    de: ['Zuletzt angesehen', 'Favoriten', 'Zu Favoriten hinzufügen', 'Aus Favoriten entfernen'],
+    fr: ['Consultés récemment', 'Favoris', 'Ajouter aux favoris', 'Retirer des favoris'],
+    es: ['Vistos recientemente', 'Favoritos', 'Añadir a favoritos', 'Quitar de favoritos'],
+  };
+  const productId = product => product.slug || product.image;
+  const readPersonal = name => {
+    try {
+      const value = JSON.parse(window.KayoPrivacy?.get(`kayo-${name}`) || '[]');
+      return Array.isArray(value) ? [...new Set(value.filter(id => typeof id === 'string' && products.some(p => productId(p) === id)))].slice(0, 100) : [];
+    } catch { return []; }
+  };
+  let favourites = readPersonal('favourites');
+  let recent = readPersonal('recent').slice(0, 7);
+  try { window.KayoPrivacy?.set('kayo-recent', JSON.stringify(recent)); } catch {}
+  const savePersonal = (name, value) => { try { window.KayoPrivacy?.set(`kayo-${name}`, JSON.stringify(value)); } catch {} };
+  function favouriteButton(product) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'catalog-favourite';
+    const update = () => {
+      const saved = favourites.includes(productId(product));
+      const labels = personalLabels[i18n.locale] || personalLabels.en;
+      button.textContent = saved ? '♥' : '♡';
+      button.setAttribute('aria-pressed', String(saved));
+      button.setAttribute('aria-label', labels[saved ? 3 : 2]);
+    };
+    update();
+    button.addEventListener('click', () => {
+      const id = productId(product);
+      favourites = favourites.includes(id) ? favourites.filter(item => item !== id) : [id, ...favourites].slice(0, 100);
+      savePersonal('favourites', favourites);
+      if (isCatalogPage) renderCatalog();
+      document.querySelectorAll('.product-modal .catalog-favourite').forEach(b => { const saved = favourites.includes(productId(product)); b.textContent = saved ? '♥' : '♡'; b.setAttribute('aria-pressed', String(saved)); b.setAttribute('aria-label', (personalLabels[i18n.locale] || personalLabels.en)[saved ? 3 : 2]); });
+    });
+    return button;
+  }
+  function renderPersonal() {
+    const parent = document.querySelector('.catalog-inner');
+    if (!parent) return;
+    parent.querySelector('.catalog-personal')?.remove();
+    const holder = document.createElement('div');
+    holder.className = 'catalog-personal';
+    const labels = personalLabels[i18n.locale] || personalLabels.en;
+    for (const [index, ids] of [[1, favourites], [0, recent]]) {
+      if (!ids.length) continue;
+      const section = document.createElement('section');
+      const heading = document.createElement('h2');
+      heading.textContent = `${labels[index]} (${ids.length})`;
+      const grid = document.createElement('div');
+      grid.className = 'catalog-personal-grid';
+      for (const id of ids) {
+        const product = products.find(p => productId(p) === id);
+        if (!product) continue;
+        const card = document.createElement('div');
+        const open = document.createElement('button');
+        open.type = 'button';
+        const image = document.createElement('img');
+        image.src = productPhotoUrl(product.image, product.imageUrl);
+        image.alt = '';
+        image.loading = 'lazy';
+        const title = document.createElement('span');
+        title.textContent = product.title || i18n.t(product.key);
+        open.append(image, title);
+        open.addEventListener('click', () => openProductModal(product, open));
+        card.append(open, favouriteButton(product));
+        grid.append(card);
+      }
+      section.append(heading, grid);
+      if (index === 0) {
+        section.classList.add('catalog-recent');
+        const viewport = document.createElement('div'); viewport.className = 'catalog-recent-viewport';
+        grid.classList.add('catalog-recent-track'); grid.tabIndex = 0;
+        grid.setAttribute('role','region'); grid.setAttribute('aria-label',labels[0]);
+        const controls = document.createElement('div'); controls.className = 'catalog-recent-controls';
+        const prev = document.createElement('button'); const next = document.createElement('button');
+        const directions = {ru:['Предыдущие товары','Следующие товары'],en:['Previous products','Next products'],uk:['Попередні товари','Наступні товари'],cs:['Předchozí produkty','Další produkty'],pl:['Poprzednie produkty','Następne produkty'],de:['Vorherige Produkte','Weitere Produkte'],fr:['Produits précédents','Produits suivants'],es:['Productos anteriores','Productos siguientes']};
+        [prev,next].forEach((b,i)=>{b.type='button';b.textContent=i?'›':'‹';b.setAttribute('aria-label',(directions[i18n.locale]||directions.en)[i]);});
+        const move = direction => grid.scrollBy({left:direction * (grid.firstElementChild?.getBoundingClientRect().width + 16 || grid.clientWidth),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+        prev.addEventListener('click',()=>move(-1)); next.addEventListener('click',()=>move(1));
+        grid.addEventListener('keydown',event=>{if(event.target!==grid)return;if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();if(event.key==='Home')grid.scrollTo({left:0});else if(event.key==='End')grid.scrollTo({left:grid.scrollWidth});else move(event.key==='ArrowLeft'?-1:1);}});
+        const update = () => {const left=grid.scrollLeft;const max=grid.scrollWidth-grid.clientWidth;prev.disabled=left<=1;next.disabled=left>=max-1;viewport.classList.toggle('has-more',left<max-1);};
+        grid.addEventListener('scroll',update,{passive:true});
+        const observer=new ResizeObserver(()=>{if(!grid.isConnected){observer.disconnect();return;}update();}); observer.observe(grid);
+        controls.append(prev,next);viewport.append(grid);section.replaceChildren(heading,controls,viewport);requestAnimationFrame(update);
+      }
+
+      holder.append(section);
+    }
+    parent.append(holder);
+  }
+
   function ensureProductModal() {
     let modal = document.querySelector('.product-modal');
     if (modal) return modal;
@@ -202,6 +420,7 @@
             <h3 id="product-modal-description-title"></h3>
             <p class="product-modal-note"></p>
           </section>
+          <a class="product-modal-catalog-link" href="catalog.html"></a>
         </div>
       </section>`;
     modal.addEventListener('click', (event) => {
@@ -210,6 +429,33 @@
     document.body.append(modal);
     window.KayoGalleryUI.decorate(modal);
     return modal;
+  }
+
+  const extraSpecLabels = {
+    ru: ["Вес нетто", "Толщина", "Объём", "Назначение", "Фиксация", "Наполнитель", "Комплектация", "Уход", "Страна производства", "Пол", "Штрихкод", "Количество слоёв наполнителя"],
+    en:['Net weight','Thickness','Capacity','Intended use','Fastening','Padding','Package contents','Care','Country of manufacture','Gender','Barcode','Layers of padding'],
+    uk:['Вага нетто','Товщина','Об’єм','Призначення','Фіксація','Наповнювач','Комплектація','Догляд','Країна виробництва','Стать','Штрихкод','Кількість шарів наповнювача'],
+    cs:['Čistá hmotnost','Tloušťka','Objem','Použití','Zapínání','Výplň','Obsah balení','Údržba','Země výroby','Pohlaví','Čárový kód','Počet vrstev výplně'],
+    pl:['Masa netto','Grubość','Pojemność','Przeznaczenie','Zapięcie','Wypełnienie','Zawartość opakowania','Pielęgnacja','Kraj produkcji','Płeć','Kod kreskowy','Liczba warstw wypełnienia'],
+    de:['Nettogewicht','Dicke','Volumen','Verwendungszweck','Verschluss','Polsterung','Lieferumfang','Pflege','Herstellungsland','Geschlecht','Barcode','Polsterschichten'],
+    fr:['Poids net','Épaisseur','Volume','Utilisation','Fermeture','Rembourrage','Contenu du colis','Entretien','Pays de fabrication','Genre','Code-barres','Couches de rembourrage'],
+    es:['Peso neto','Grosor','Capacidad','Uso','Cierre','Acolchado','Contenido del paquete','Cuidados','País de fabricación','Género','Código de barras','Capas de acolchado'],
+  };
+  function appendExtraSpecifications(list, product) {
+    const labels = extraSpecLabels[i18n.locale] || extraSpecLabels.en;
+    const keys = ['netWeightGrams','thickness','volume','purpose','fastening','padding','packageContents','care','countryOfOrigin','gender','barcode','layers'];
+    const specs = product.specifications || {};
+    keys.forEach((key,index)=>{
+      const dynamic = key === 'netWeightGrams' || key === 'barcode';
+      const value = typeof specs[key] === 'object' ? localizedSpecification(specs[key]) : specs[key];
+      if (!value && !(dynamic && (product.skus || []).some(s=>s.specifications?.[key]!==undefined))) return;
+      const row = document.createElement('div'); row.dataset.specKey = key;
+      const term = document.createElement('dt'); term.textContent = labels[index];
+      const definition = document.createElement('dd'); definition.textContent = dynamic ? '—' : value;
+      row.append(term,definition);list.append(row);
+    });
+    list.children[8].dataset.specKey = 'grossWeightGrams';
+    list.children[8].dataset.baseValue = list.children[8].querySelector('dd').textContent;
   }
 
   function updateProductModal(product) {
@@ -221,6 +467,8 @@
     window.KayoGalleryUI.update(modal, product, titleText, i18n.locale);
     modal.querySelector('.product-modal-category').textContent = categoryText;
     modal.querySelector('#product-modal-title').textContent = titleText;
+    modal.querySelector('.catalog-favourite')?.remove();
+    const favourite = favouriteButton(product); favourite.classList.add('product-modal-favourite'); modal.querySelector('.product-modal-specifications').before(favourite);
     const specifications = product.specifications || {};
     const rows = [
       titleText, categoryText, specifications.article,
@@ -239,19 +487,50 @@
       row.append(term, definition);
       return row;
     }));
+    appendExtraSpecifications(list, product);
+    window.KayoSizeChart?.renderVariants(modal, product, i18n.locale);
     modal.querySelector('#product-modal-specifications-title').textContent = detailLabel(0);
     modal.querySelector('#product-modal-description-title').textContent = detailLabel(13);
+    modal.dataset.productSlug = productSlug(product);
+    renderRelated(modal, product);
+    window.KayoReviews?.render(modal, product);
     modal.querySelector('.product-modal-note').textContent = (product.description?.[i18n.locale] || product.description?.en) || (product.section === 'gloves'
       ? gloveDescription(product)
       : product.section === 'protection'
         ? protectionLabel('descriptionPending')
         : gloveLabel('descriptionPending'));
+    const catalogLink = modal.querySelector('.product-modal-catalog-link');
+    const catalogLinkLabels = {
+      ru: 'Открыть в каталоге', en: 'Open in catalog', uk: 'Відкрити в каталозі', cs: 'Otevřít v katalogu',
+      pl: 'Otwórz w katalogu', de: 'Im Katalog öffnen', fr: 'Ouvrir dans le catalogue',
+      es: 'Abrir en el catálogo',
+    };
+    catalogLink.textContent = catalogLinkLabels[i18n.locale] || catalogLinkLabels.en;
+    catalogLink.href = `catalog.html?product=${encodeURIComponent(productSlug(product))}#${encodeURIComponent(product.section)}`;
+    catalogLink.hidden = Boolean(document.querySelector('.catalog-page'));
     modal.querySelectorAll('[data-modal-close]').forEach((button) => {
       button.setAttribute('aria-label', gloveLabel('close'));
     });
   }
 
+  function renderRelated(modal, product) {
+    modal.querySelectorAll('.product-related').forEach(section=>section.remove());
+    for (const [field,key] of [['relatedProducts','completeKit'],['alternativeProducts','otherColours']]) {
+      const selected=(product[field]||[]).map(slug=>products.find(p=>productSlug(p)===slug)).filter(p=>p&&p!==product);
+      if(!selected.length)continue;
+      const section=document.createElement('section');section.className='product-related';section.dataset.recommendation=field;
+      const heading=document.createElement('h3');
+      const fallback={completeKit:{en:'Complete your training kit',uk:'Доповніть екіпірування',ru:'Дополните экипировку'},otherColours:{en:'Other colours of this model',uk:'Інші кольори цієї моделі',ru:'Другие цвета этой модели'}};
+      heading.textContent=window.KayoEngagement?.t(key)||fallback[key][i18n.locale]||fallback[key].en;
+      const grid=document.createElement('div');grid.className='product-related-grid';
+      selected.forEach(item=>{const link=document.createElement('a');link.href=`catalog.html?product=${encodeURIComponent(productSlug(item))}#${encodeURIComponent(item.section)}`;const image=document.createElement('img');image.src=productPhotoUrl(item.image,item.imageUrl);image.alt='';image.loading='lazy';const title=document.createElement('span');title.textContent=item.title;link.append(image,title);grid.append(link)});
+      section.append(heading,grid);modal.querySelector('.product-modal-content').append(section);
+    }
+  }
   function openProductModal(product, trigger) {
+    recent = [productId(product), ...recent.filter(id => id !== productId(product))].slice(0, 7);
+    savePersonal('recent', recent);
+    renderPersonal();
     activeModalProduct = product;
     modalTrigger = trigger;
     const modal = ensureProductModal();
@@ -264,6 +543,7 @@
   function closeProductModal() {
     const modal = document.querySelector('.product-modal');
     if (!modal || modal.hidden) return;
+    window.KayoSizeChart?.closeChart();
     modal.hidden = true;
     document.body.classList.remove('modal-open');
     activeModalProduct = null;
@@ -276,6 +556,24 @@
     }
   }
 
+  const productSlug = (product) => product.slug || product.image?.replace('/', '-');
+  window.KayoCatalog = {
+    products,
+    openBySlug(slug, trigger) {
+      const product = products.find((item) => productSlug(item) === slug);
+      if (!product || !window.KayoGalleryUI) return false;
+      openProductModal(product, trigger);
+      return true;
+    },
+  };
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('#hit-cards .product-action a, #hit-cards .product-photo-link, #sale-cards .product-action a, #sale-cards .product-photo-link, .hits-grid .hit-card .offer-link, .hits-grid .hit-card .hit-photo-link, .offers-grid:not(.hits-grid) .offer-card .offer-link, .offers-grid:not(.hits-grid) .offer-card .offer-photo-link');
+    if (!link) return;
+    const slug = new URL(link.href, location.href).searchParams.get('product');
+    if (slug && window.KayoCatalog.openBySlug(slug, link)) event.preventDefault();
+  });
+
   function renderCatalog() {
     const active = activeSection();
     document.documentElement.dataset.catalogInitialSection = active.slug || '';
@@ -285,6 +583,7 @@
     if (gloveSection?.subtype) visibleProducts = products.filter((product) => product.subtype === gloveSection.subtype);
     if (protectionSection?.subtype) visibleProducts = products.filter((product) => product.section === 'protection' && product.subtype === protectionSection.subtype);
 
+    visibleProducts = visibleProducts.filter(applyProductFilters);
     const currentLabel = gloveSection?.subtype
       ? gloveLabel(gloveSection.label)
       : protectionSection?.subtype
@@ -296,6 +595,9 @@
 
     document.querySelector('[data-catalog-title]').textContent = title;
     document.querySelector('[data-catalog-description]').textContent = i18n.t(active.description);
+    document.querySelectorAll('[data-catalog-feature]').forEach((feature) => {
+      feature.hidden = feature.dataset.catalogFeature !== (gloveSection?.slug || protectionSection?.slug || active.slug);
+    });
     document.querySelector('[data-catalog-current]').textContent = currentLabel;
     document.querySelector('[data-catalog-count]').textContent = `${visibleProducts.length} · ${currentLabel}`;
     document.title = `${title} — KAYO`;
@@ -329,15 +631,19 @@
 
       const categoryGrid = document.createElement('div');
       categoryGrid.className = 'catalog-subcategory-grid';
+      categoryGrid.classList.toggle('catalog-subcategory-grid--gloves', subsectionConfig.assetFolder === 'catalog-gloves');
       categoryGrid.append(...subsectionConfig.sections.filter((section) => section.subtype).map((section) => {
         const link = document.createElement('a');
         link.className = 'catalog-subcategory-card';
+        link.classList.toggle('has-lifestyle', Boolean(section.lifestyle));
         link.href = `#${section.slug}`;
         link.classList.toggle('active', section.slug === selectedSlug);
         if (link.classList.contains('active')) link.setAttribute('aria-current', 'page');
         const image = document.createElement('img');
-        image.src = `assets/${subsectionConfig.assetFolder}/${section.image}.webp`;
+        image.className = 'catalog-subcategory-product-image';
+        image.src = productPhotoUrl(`${subsectionConfig.assetFolder}/${section.image}`);
         image.alt = '';
+        image.loading = 'lazy';
         const copy = document.createElement('span');
         copy.className = 'catalog-subcategory-copy';
         const heading = document.createElement('strong');
@@ -347,11 +653,21 @@
         meta.textContent = section.sizes ? `${gloveModelCount(count)} · ${section.sizes}` : gloveModelCount(count);
         copy.append(heading, meta);
         link.append(image, copy);
+        if (section.lifestyle) {
+          const lifestyle = document.createElement('img');
+          lifestyle.className = 'catalog-subcategory-lifestyle-image';
+          lifestyle.src = `assets/catalog-lifestyle/${section.lifestyle}.webp`;
+          lifestyle.alt = '';
+          lifestyle.loading = 'lazy';
+          lifestyle.decoding = 'async';
+          link.append(lifestyle);
+        }
         return link;
       }));
       subcategories.append(allLink, categoryGrid);
     }
 
+    renderFilters(active, gloveSection?.subtype ? gloveSection : protectionSection);
     const grid = document.querySelector('.catalog-grid');
     grid.replaceChildren(...visibleProducts.map((product) => {
       const titleText = product.title || i18n.t(product.key);
@@ -364,10 +680,16 @@
       card.dataset.productSlug = product.slug || product.image.replace('/', '-');
       if (product.variants) card.dataset.variants = product.variants.join(',');
       const image = document.createElement('img');
-      image.src = product.imageUrl || `assets/${product.image}.webp`;
+      image.src = productPhotoUrl(product.image, product.imageUrl);
       image.alt = titleText;
       image.loading = 'lazy';
       image.decoding = 'async';
+      const imageButton = document.createElement('button');
+      imageButton.type = 'button';
+      imageButton.className = 'catalog-product-photo';
+      imageButton.setAttribute('aria-label', `${i18n.t('details')}: ${titleText}`);
+      imageButton.append(image);
+      imageButton.addEventListener('click', () => openProductModal(product, imageButton));
       const info = document.createElement('div');
       info.className = 'catalog-product-info';
       const category = document.createElement('p');
@@ -381,11 +703,12 @@
       actionButton.type = 'button';
       actionButton.textContent = i18n.t('details');
       actionButton.addEventListener('click', () => openProductModal(product, actionButton));
-      action.append(actionButton);
+      action.append(favouriteButton(product), actionButton);
       info.append(category, heading, action);
-      card.append(image, info);
+      card.append(imageButton, info);
       return card;
     }));
+    renderPersonal();
     if (linkedProductSlug && !linkedProductHandled) {
       linkedProductHandled = true;
       const product = visibleProducts.find((item) => (item.slug || item.image.replace('/', '-')) === linkedProductSlug);
@@ -397,13 +720,14 @@
     }
   }
 
-  addEventListener('hashchange', renderCatalog);
+  const isCatalogPage = Boolean(document.querySelector('.catalog-page'));
+  if (isCatalogPage) addEventListener('hashchange', renderCatalog);
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeProductModal();
+    if (event.key === 'Escape' && !document.querySelector('.kayo-dialog[open]')) closeProductModal();
   });
   document.addEventListener('kayo:localechange', () => {
-    renderCatalog();
+    if (isCatalogPage) renderCatalog();
     if (activeModalProduct) updateProductModal(activeModalProduct);
   });
-  renderCatalog();
+  if (isCatalogPage) renderCatalog();
 })();

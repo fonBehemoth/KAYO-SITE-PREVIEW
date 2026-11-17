@@ -31,9 +31,10 @@
 
   function offers(locale) {
     const active = window.KayoOffers?.list() || [];
+    const action = escapeHtml((hitsCopy[locale] || hitsCopy.en)[3]);
     const cards = active.map((offer) => {
       const title = escapeHtml(offer.title);
-      return `<article class="offer-card"><img src="${escapeHtml(offer.imageUrl)}" alt="${title}" loading="lazy" decoding="async"><div><p class="eyebrow">${text(locale, 'offersLabel')}</p><h2>${title}</h2><a href="${escapeHtml(offer.href)}" class="offer-link">${text(locale, 'offersCta')} <span aria-hidden="true">↗</span></a></div></article>`;
+      return `<article class="offer-card"><a class="offer-photo-link" href="${escapeHtml(offer.href)}" aria-label="${action}: ${title}"><img src="${escapeHtml(offer.imageUrl)}" alt="" loading="lazy" decoding="async"></a><div><p class="eyebrow">${text(locale, 'offersLabel')}</p><h2>${title}</h2><a href="${escapeHtml(offer.href)}" class="offer-link">${action} <span class="kayo-arrow kayo-arrow--diagonal" aria-hidden="true"></span></a></div></article>`;
     }).join('');
     const empty = { en: 'There are no current offers.', uk: 'Наразі немає активних акцій.', cs: 'Momentálně nejsou žádné akce.', pl: 'Obecnie nie ma aktywnych promocji.', de: 'Derzeit gibt es keine Angebote.', fr: 'Aucune offre en cours.', es: 'No hay ofertas activas en este momento.' };
     return hero(locale, 'offersTitle', 'offersLead') + `<main class="page-wrap offers-grid">${cards || `<p class="offers-empty">${empty[locale] || empty.en}</p>`}</main>`;
@@ -52,7 +53,7 @@
   function hits(locale) {
     const [title, lead, label, action, empty] = hitsCopy[locale] || hitsCopy.en;
     const cards = (window.KayoFeatured?.list() || []).map((product) => `
-      <article class="offer-card hit-card"><img src="${escapeHtml(product.imageUrl)}" alt="${escapeHtml(product.title)}" loading="lazy" decoding="async"><div><p class="eyebrow">${escapeHtml(label)}</p><h2>${escapeHtml(product.title)}</h2><a href="${escapeHtml(product.href)}" class="offer-link">${escapeHtml(action)} <span aria-hidden="true">↗</span></a></div></article>`).join('');
+      <article class="offer-card hit-card"><a class="hit-photo-link" href="${escapeHtml(product.href)}" aria-label="${escapeHtml(action)}: ${escapeHtml(product.title)}"><img src="${escapeHtml(product.imageUrl)}" alt="" loading="lazy" decoding="async"></a><div><p class="eyebrow">${escapeHtml(label)}</p><h2>${escapeHtml(product.title)}</h2><a href="${escapeHtml(product.href)}" class="offer-link">${escapeHtml(action)} <span class="kayo-arrow kayo-arrow--diagonal" aria-hidden="true"></span></a></div></article>`).join('');
     return `<section class="sub-hero secondary-hero"><div><span>KAYO / ${escapeHtml(title)}</span><h1>${escapeHtml(title)}</h1><p>${escapeHtml(lead)}</p></div></section><main class="page-wrap offers-grid hits-grid">${cards || `<p class="offers-empty">${escapeHtml(empty)}</p>`}</main>`;
   }
 
@@ -62,12 +63,14 @@
       const address = escapeHtml(location.address || '');
       const description = escapeHtml(location.description?.[locale] || location.description?.en || '');
       const showMap = validPoint(location)
-        ? `<button type="button" class="location-select" data-location-slot="${slot}">${text(locale, 'whereSelect')} <span aria-hidden="true">↗</span></button>`
+        ? `<button type="button" class="location-select" data-location-slot="${slot}">${text(locale, 'whereSelect')} <span class="kayo-arrow kayo-arrow--diagonal" aria-hidden="true"></span></button>`
         : '';
       return `<article class="location-card"><span class="eyebrow">${text(locale, 'wherePoint')} ${slot.toString().padStart(2, '0')}</span><h2 class="location-address">${address}</h2><p class="location-description">${description}</p>${showMap}</article>`;
     }).join('');
-    return hero(locale, 'whereTitle', 'whereLead') + `<main class="page-wrap where-layout"><section class="location-grid" aria-label="${text(locale, 'whereTitle')}">${cards}</section><section class="location-map" aria-label="${text(locale, 'whereMapTitle')}"><div class="map-top"><h2>${text(locale, 'whereMapTitle')}</h2><p>${text(locale, 'whereMapIntro')}</p></div><div id="osm-map"><button type="button" class="map-open">${text(locale, 'whereMapOpen')} <span aria-hidden="true">↗</span></button></div><a class="map-source" href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a></section></main>`;
+    return hero(locale, 'whereTitle', 'whereLead') + `<main class="page-wrap where-layout"><section class="location-grid" aria-label="${text(locale, 'whereTitle')}">${cards}</section><section class="location-map" aria-label="${text(locale, 'whereMapTitle')}"><div class="map-top"><h2>${text(locale, 'whereMapTitle')}</h2><p>${text(locale, 'whereMapIntro')}</p></div><div id="osm-map"><button type="button" class="map-open">${text(locale, 'whereMapOpen')} <span class="kayo-arrow kayo-arrow--diagonal" aria-hidden="true"></span></button></div><a class="map-source" href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a></section></main>`;
   }
+
+  document.addEventListener('kayo:consentchange',()=>{if(!window.KayoPrivacy?.state.externalMedia){const holder=document.getElementById('osm-map');if(holder?.querySelector('iframe'))holder.innerHTML=holder.dataset.kayoMapMarkup||'';}});
 
   function mapUrl(location) {
     const params = new URLSearchParams({ layer: 'mapnik' });
@@ -85,6 +88,8 @@
   function openMap(location) {
     const holder = document.getElementById('osm-map');
     if (!holder) return;
+    if (!window.KayoPrivacy?.state.externalMedia) { window.KayoEngagement?.openCookies(document.activeElement); return; }
+    if (!holder.querySelector('iframe')) holder.dataset.kayoMapMarkup = holder.innerHTML;
     const iframe = document.createElement('iframe');
     iframe.title = text(document.documentElement.lang || 'en', 'whereMapTitle').replace(/&[^;]+;/g, ' ');
     iframe.loading = 'lazy';

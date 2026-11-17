@@ -28,5 +28,15 @@
 @media(max-width:800px){.category-detail-body[data-category="gloves"] .category-detail-hero img{object-position:center}}
 
 /* Accessories currently use the confirmed product photograph supplied in the catalog. */
-.category-detail-body[data-category="accessories"] .category-detail-hero picture{background:#fff}
-.category-detail-body[data-category="accessories"] .category-detail-hero img{object-fit:contain;opacity:1}
+.category-detail-body[data-category="accessories"] .category-detail-hero picture{background:#111}
+.category-detail-body[data-category="accessories"] .category-detail-hero img{object-fit:cover;opacity:1}
+
+.category-detail-lifestyle{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:min(1320px,100%);margin:0 auto;padding:20px 24px;background:#000}
+.category-detail-lifestyle img{display:block;width:100%;height:300px;border-radius:8px;object-fit:cover;background:#111}
+.category-detail-lifestyle img:first-child{object-position:center 68%}
+@media(max-width:800px){.category-detail-body[data-category="bags"] .category-detail-hero p{max-width:320px;margin:12px auto 0;white-space:normal}}
+@media(max-width:800px){
+  .category-detail-lifestyle{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}
+  .category-detail-lifestyle img{height:170px}
+  .category-detail-lifestyle img:first-child{grid-column:1/-1;height:240px}
+}

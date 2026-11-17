@@ -5,6 +5,7 @@
   if (!i18n || !page) return;
 
   const labels = {
+    ru: {"categories": "Категории", "characteristics": "Характеристики", "storage": "Хранение и срок службы", "care": "Уход", "safety": "Предупреждение", "catalog": "Перейти в раздел каталога"},
     en: { categories: 'Categories', characteristics: 'Characteristics', storage: 'Storage and service life', care: 'Care', safety: 'Warning', catalog: 'Go to this catalog section' },
     uk: { categories: 'Категорії', characteristics: 'Характеристики', storage: 'Зберігання та термін служби', care: 'Догляд', safety: 'Попередження', catalog: 'Перейти до розділу каталогу' },
   };

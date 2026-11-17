@@ -1,5 +1,6 @@
 (() => {
   const labels = {
+    ru: ["Все товары", "Перчатки", "Защита", "Снарядное оборудование", "Сумки / одежда", "Аксессуары"],
     en: ['All products', 'Gloves', 'Protection', 'Training equipment', 'Sports bags / apparel', 'Accessories'],
     uk: ['Всі товари', 'Рукавиці', 'Захист', 'Снарядне обладнання', 'Спортивні сумки / одяг', 'Аксесуари'],
     cs: ['Všechny produkty', 'Rukavice', 'Ochrana', 'Tréninkové vybavení', 'Sportovní tašky / oblečení', 'Doplňky'],
@@ -7,6 +8,16 @@
     de: ['Alle Produkte', 'Handschuhe', 'Schutz', 'Trainingsausrüstung', 'Sporttaschen / Bekleidung', 'Zubehör'],
     fr: ['Tous les produits', 'Gants', 'Protection', 'Matériel d’entraînement', 'Sacs de sport / vêtements', 'Accessoires'],
     es: ['Todos los productos', 'Guantes', 'Protección', 'Equipo de entrenamiento', 'Bolsas deportivas / ropa', 'Accesorios'],
+  };
+  const searchCopy = {
+    ru: ["Поиск", "Поиск KAYO", "Название или артикул", "Введите название товара или страницы.", "Ничего не найдено.", "Товары", "Страницы", "Закрыть поиск"],
+    en: ['Search', 'Search KAYO', 'Product name or article number', 'Start typing to find a product or page.', 'No results found.', 'Products', 'Pages', 'Close search'],
+    uk: ['Пошук', 'Пошук KAYO', 'Назва товару або артикул', 'Введіть назву товару або сторінки.', 'Нічого не знайдено.', 'Товари', 'Сторінки', 'Закрити пошук'],
+    cs: ['Hledat', 'Hledat na KAYO', 'Název nebo kód výrobku', 'Zadejte název výrobku nebo stránky.', 'Nic nebylo nalezeno.', 'Produkty', 'Stránky', 'Zavřít hledání'],
+    pl: ['Szukaj', 'Szukaj w KAYO', 'Nazwa lub numer produktu', 'Wpisz nazwę produktu lub strony.', 'Brak wyników.', 'Produkty', 'Strony', 'Zamknij wyszukiwanie'],
+    de: ['Suche', 'KAYO durchsuchen', 'Produktname oder Artikelnummer', 'Produkt oder Seite eingeben.', 'Keine Ergebnisse gefunden.', 'Produkte', 'Seiten', 'Suche schließen'],
+    fr: ['Rechercher', 'Rechercher sur KAYO', 'Nom ou référence du produit', 'Saisissez un produit ou une page.', 'Aucun résultat.', 'Produits', 'Pages', 'Fermer la recherche'],
+    es: ['Buscar', 'Buscar en KAYO', 'Nombre o referencia del producto', 'Escribe un producto o una página.', 'No hay resultados.', 'Productos', 'Páginas', 'Cerrar búsqueda'],
   };
   const slugs = ['', 'gloves', 'protection', 'equipment', 'bags', 'accessories'];
   const privacyCopy = {
@@ -48,6 +59,15 @@
   };
   let privacyOpener = null;
   let subscribeOpener = null;
+  let scrollFrame = 0;
+  let originalScrollBehavior = null;
+  const stopArrowScroll = () => {
+    if (!scrollFrame) return;
+    cancelAnimationFrame(scrollFrame);
+    scrollFrame = 0;
+    document.documentElement.style.scrollBehavior = originalScrollBehavior;
+    originalScrollBehavior = null;
+  };
   const subscribeCopy = {
     en: { title: 'Subscribe to KAYO news', email: 'Email address', consent: 'I would like to receive KAYO news by email.', note: 'Preview form: no information is sent or saved yet.', submit: 'Subscribe', pending: 'The form is ready, but no request was sent. Email delivery will be connected later.', close: 'Close' },
     uk: { title: 'Підписка на новини KAYO', email: 'Електронна пошта', consent: 'Хочу отримувати новини KAYO електронною поштою.', note: 'Попередня форма: дані поки не надсилаються і не зберігаються.', submit: 'Підписатись', pending: 'Форма готова, але заявку не надіслано. Надсилання підключимо пізніше.', close: 'Закрити' },
@@ -65,16 +85,343 @@
   };
 
   function closeMenus(except) {
+    document.querySelectorAll('header.menu-open').forEach((header) => {
+      if (header !== except && !(except instanceof Element && header.querySelector('.catalog-nav')?.contains(except))) {
+        header.classList.remove('menu-open');
+        header.querySelector('.hamburger')?.setAttribute('aria-expanded', 'false');
+      }
+    });
     document.querySelectorAll('.catalog-nav.is-open').forEach((menu) => {
       if (menu !== except) {
         menu.classList.remove('is-open');
         menu.querySelector('.catalog-toggle')?.setAttribute('aria-expanded', 'false');
       }
     });
+    document.querySelectorAll('.language-menu-control.is-open').forEach((menu) => {
+      if (menu !== except) {
+        menu.classList.remove('is-open');
+        menu.querySelector('.language-trigger')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function enhanceLanguage() {
+    const select = document.querySelector('#language');
+    if (!select || select.closest('.language-menu-control')) return;
+    const label = select.closest('label.language');
+    if (!label) return;
+
+    const control = document.createElement('div');
+    control.className = 'language language-menu-control';
+    const caption = label.querySelector('.sr-only');
+    label.replaceWith(control);
+    if (caption) control.append(caption);
+    control.append(select);
+    select.hidden = true;
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'language-trigger';
+    trigger.setAttribute('aria-haspopup', 'menu');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-label', caption?.textContent || 'Language');
+    const code = document.createElement('span');
+    const chevron = document.createElement('span');
+    chevron.className = 'language-chevron';
+    chevron.setAttribute('aria-hidden', 'true');
+    trigger.append(code, chevron);
+    const menu = document.createElement('div');
+    menu.className = 'language-menu';
+    menu.id = 'language-menu';
+    menu.setAttribute('role', 'menu');
+    trigger.setAttribute('aria-controls', menu.id);
+
+    const sync = () => {
+      code.textContent = select.selectedOptions[0]?.textContent || select.value;
+      trigger.setAttribute('aria-label', caption?.textContent || 'Language');
+      menu.querySelectorAll('[data-language]').forEach((option) => {
+        option.setAttribute('aria-checked', String(option.dataset.language === select.value));
+      });
+    };
+    const open = () => {
+      closeMenus(control);
+      control.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+    };
+    const close = () => {
+      control.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    };
+    [...select.options].forEach((option) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'language-option';
+      item.dataset.language = option.value;
+      item.setAttribute('role', 'menuitemradio');
+      item.textContent = option.textContent;
+      item.addEventListener('click', (event) => {
+        if (select.value !== option.value) {
+          select.value = option.value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        sync();
+        close();
+        if (event.detail === 0) trigger.focus({ preventScroll: true });
+        else item.blur();
+      });
+      menu.append(item);
+    });
+    trigger.addEventListener('click', () => {
+      if (control.classList.contains('is-open')) close();
+      else open();
+    });
+    trigger.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        open();
+        const items = menu.querySelectorAll('.language-option');
+        (event.key === 'ArrowDown' ? items[0] : items[items.length - 1]).focus();
+      }
+    });
+    menu.addEventListener('keydown', (event) => {
+      const items = [...menu.querySelectorAll('.language-option')];
+      const index = items.indexOf(document.activeElement);
+      if (event.key === 'Escape') { event.preventDefault(); close(); trigger.focus(); }
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        items[(index + (event.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length].focus();
+      }
+    });
+    control.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'mouse' || event.pointerType === 'pen') close();
+    });
+    control.addEventListener('focusout', (event) => {
+      if (!control.contains(event.relatedTarget)) close();
+    });
+    select.addEventListener('change', sync);
+    control.append(trigger, menu);
+    sync();
+  }
+
+  function ensureHeroMotion() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const ring = document.querySelector('.ring-text');
+    const track = document.querySelector('.marquee-track');
+    if (ring && !reducedMotion.matches) {
+      const initial = getComputedStyle(ring).transform;
+      window.setTimeout(() => {
+        if (reducedMotion.matches || document.hidden || getComputedStyle(ring).transform !== initial) return;
+        ring.style.animation = 'none';
+        const started = performance.now();
+        const rotate = (now) => {
+          if (reducedMotion.matches) {
+            ring.style.transform = '';
+            ring.style.animation = '';
+            return;
+          }
+          ring.style.transform = `rotate(${(((now - started) % 14000) / 14000) * 360}deg)`;
+          requestAnimationFrame(rotate);
+        };
+        requestAnimationFrame(rotate);
+      }, 400);
+    }
+
+    const group = track?.firstElementChild;
+    if (!group) return;
+    let distance = group.offsetWidth;
+    let elapsed = 0;
+    let previous = 0;
+    let frame = 0;
+    let visible = true;
+    const tick = (now) => {
+      frame = 0;
+      if (!visible || document.hidden || reducedMotion.matches) return;
+      if (previous) elapsed += now - previous;
+      previous = now;
+      track.style.transform = `translate3d(${-((elapsed % 24000) / 24000) * distance}px,0,0)`;
+      frame = requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (!frame && visible && !document.hidden && !reducedMotion.matches) frame = requestAnimationFrame(tick);
+    };
+    const stop = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      previous = 0;
+      if (reducedMotion.matches) track.style.transform = '';
+    };
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+      else stop();
+    }).observe(track);
+    window.addEventListener('resize', () => { distance = group.offsetWidth; });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else start(); });
+    reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) stop(); else start(); });
+    start();
+  }
+
+  let searchOpener = null;
+  let catalogLoad = null;
+  const normalizeSearch = (value) => String(value || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase().trim();
+  const searchableValues = (value) => {
+    if (Array.isArray(value)) return value.flatMap(searchableValues);
+    if (value && typeof value === 'object') return Object.values(value).flatMap(searchableValues);
+    return typeof value === 'string' ? [value] : [];
+  };
+  const searchPages = [
+    ['catalog.html', 'catalog', 'Catalog'],
+    ['categories.html', 'categoriesNav', 'Categories'],
+    ['hits.html', 'hitsNav', 'Best sellers'],
+    ['offers.html', 'sales', 'Offers'],
+    ['where-to-buy.html', 'whereNav', 'Where to buy'],
+    ['news.html', 'newsNav', 'News'],
+    ['about.html', 'company', 'Company'],
+    ['contact.html', 'contacts', 'Contacts'],
+  ];
+  const searchText = () => searchCopy[locale()] || searchCopy.en;
+  const pageTitle = (href, key, fallback) => {
+    const visibleLink = document.querySelector(`header nav a[href="${href}"], footer a[href="${href}"]`);
+    if (visibleLink?.textContent?.trim()) return visibleLink.textContent.trim();
+    const translated = window.KayoI18n?.t(key);
+    return translated && translated !== key ? translated : fallback;
+  };
+
+  function loadCatalogForSearch() {
+    if (window.KayoCatalog) return Promise.resolve(window.KayoCatalog);
+    if (catalogLoad) return catalogLoad;
+    catalogLoad = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'catalog.js?v=20261013-search';
+      script.onload = () => resolve(window.KayoCatalog);
+      script.onerror = () => reject(new Error('Catalog search index could not be loaded'));
+      document.body.append(script);
+    });
+    return catalogLoad;
+  }
+
+  function ensureSearchDialog() {
+    let dialog = document.querySelector('.site-search-modal');
+    if (dialog) return dialog;
+    dialog = document.createElement('div');
+    dialog.className = 'site-search-modal';
+    dialog.hidden = true;
+    dialog.innerHTML = '<button class="site-search-backdrop" type="button" data-search-close tabindex="-1"></button><section class="site-search-panel" role="dialog" aria-modal="true" aria-labelledby="site-search-title"><button class="site-search-close" type="button" data-search-close>×</button><h2 id="site-search-title"></h2><label class="site-search-field"><span class="sr-only"></span><input type="search" autocomplete="off"></label><p class="site-search-status" role="status" aria-live="polite"></p><div class="site-search-results"></div></section>';
+    dialog.addEventListener('click', (event) => {
+      if (event.target.closest('[data-search-close]')) closeSearch();
+    });
+    dialog.querySelector('input').addEventListener('input', () => renderSearch(dialog));
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') { event.preventDefault(); closeSearch(); }
+      if (event.key !== 'Tab') return;
+      const controls = [...dialog.querySelectorAll('.site-search-panel button, .site-search-panel input, .site-search-panel a')];
+      const first = controls[0], last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+    document.body.append(dialog);
+    return dialog;
+  }
+
+  function renderSearch(dialog) {
+    if (dialog.hidden) return;
+    const copy = searchText();
+    const input = dialog.querySelector('input');
+    dialog.querySelector('#site-search-title').textContent = copy[1];
+    dialog.querySelector('.site-search-field span').textContent = copy[0];
+    input.placeholder = copy[2];
+    input.setAttribute('aria-label', copy[2]);
+    dialog.querySelector('.site-search-close').setAttribute('aria-label', copy[7]);
+    dialog.querySelector('.site-search-backdrop').setAttribute('aria-label', copy[7]);
+    const status = dialog.querySelector('.site-search-status');
+    const container = dialog.querySelector('.site-search-results');
+    container.replaceChildren();
+    const query = normalizeSearch(input.value);
+    if (!query) { status.textContent = copy[3]; return; }
+    const terms = query.split(/\s+/);
+    const products = (window.KayoCatalog?.products || []).filter((product) => {
+      const title = product.title || window.KayoI18n?.t(product.key) || '';
+      const category = labels[locale()]?.[slugs.indexOf(product.section)] || '';
+      const haystack = normalizeSearch([title, product.section, category, ...searchableValues(product.specifications), ...searchableValues(product.description), ...searchableValues(product.variants)].join(' '));
+      return terms.every((term) => haystack.includes(term));
+    }).slice(0, 12);
+    const pages = searchPages.filter(([href, key, fallback]) => {
+      const haystack = normalizeSearch(`${pageTitle(href, key, fallback)} ${fallback}`);
+      return terms.every((term) => haystack.includes(term));
+    });
+    const addGroup = (heading, items) => {
+      if (!items.length) return;
+      const group = document.createElement('section');
+      group.className = 'site-search-group';
+      const title = document.createElement('h3');
+      title.textContent = heading;
+      group.append(title, ...items);
+      container.append(group);
+    };
+    addGroup(copy[5], products.map((product) => {
+      const link = document.createElement('a');
+      const slug = product.slug || product.image?.replace('/', '-');
+      link.href = `catalog.html?product=${encodeURIComponent(slug)}#${encodeURIComponent(product.section || '')}`;
+      const photo = document.createElement('img');
+      photo.src = product.imageUrl || `assets/${product.image}.webp`;
+      photo.alt = '';
+      photo.loading = 'lazy';
+      const title = document.createElement('span');
+      title.textContent = product.title || window.KayoI18n?.t(product.key) || slug;
+      link.append(photo, title);
+      return link;
+    }));
+    addGroup(copy[6], pages.map(([href, key, fallback]) => {
+      const link = document.createElement('a');
+      link.href = href;
+      link.textContent = pageTitle(href, key, fallback);
+      return link;
+    }));
+    status.textContent = container.children.length ? '' : copy[4];
+  }
+
+  function closeSearch() {
+    const dialog = document.querySelector('.site-search-modal');
+    if (!dialog || dialog.hidden) return;
+    dialog.hidden = true;
+    document.body.classList.remove('search-open');
+    if (searchOpener?.isConnected) searchOpener.focus();
+    searchOpener = null;
+  }
+
+  function enhanceSearch() {
+    document.querySelectorAll('header .search').forEach((icon) => {
+      if (icon.matches('button.search-trigger')) {
+        icon.setAttribute('aria-label', searchText()[0]);
+        return;
+      }
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'search search-trigger';
+      button.setAttribute('aria-label', searchText()[0]);
+      button.setAttribute('aria-haspopup', 'dialog');
+      icon.replaceWith(button);
+      button.addEventListener('click', () => {
+        searchOpener = button;
+        const dialog = ensureSearchDialog();
+        dialog.hidden = false;
+        document.body.classList.add('search-open');
+        const input = dialog.querySelector('input');
+        input.value = '';
+        renderSearch(dialog);
+        input.focus();
+        loadCatalogForSearch().then(() => renderSearch(dialog)).catch(() => renderSearch(dialog));
+      });
+    });
   }
 
   function enhanceNavigation() {
     enhanceFooter();
+    enhanceLanguage();
+    enhanceSearch();
+    document.querySelectorAll('header .hamburger').forEach((trigger) => {
+      trigger.setAttribute('aria-expanded', String(trigger.closest('header').classList.contains('menu-open')));
+    });
     document.querySelectorAll('footer .footer-bottom > span:last-child').forEach((span) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -121,6 +468,13 @@
         event.stopPropagation();
         toggleDropdown();
       });
+      wrapper.addEventListener('pointerleave', (event) => {
+        if (event.pointerType === 'mouse' || event.pointerType === 'pen') {
+          wrapper.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.blur();
+        }
+      });
       original.addEventListener('click', (event) => {
         if (window.matchMedia('(max-width: 1000px)').matches && !wrapper.classList.contains('is-open')) {
           event.preventDefault();
@@ -162,7 +516,21 @@
     });
   }
 
+  function enhanceTikTok() {
+    document.querySelectorAll('.social-icons,.story-social').forEach(container => {
+      if (container.querySelector('[data-tiktok]')) return;
+      const url = window.KayoCms?.social?.tiktok;
+      const active = typeof url === 'string' && /^https:\/\/(www\.)?tiktok\.com\/@[A-Za-z0-9._]+\/?$/.test(url);
+      const icon = document.createElement(active ? 'a' : 'span'); icon.dataset.tiktok = '';
+      icon.className = 'social-icon social-icon--tiktok'; icon.setAttribute('aria-label','TikTok');
+      if (active) { icon.href = url; icon.target = '_blank'; icon.rel = 'noopener noreferrer'; }
+      else { icon.setAttribute('role','img'); icon.title = 'TikTok'; }
+      icon.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M16.6 1c.3 2.6 1.7 4.1 4.4 4.3v4a10 10 0 0 1-4.4-1.3v8.1a6.9 6.9 0 1 1-6-6.8v4.1a2.9 2.9 0 1 0 2 2.7V1z"/></svg>';
+      container.append(icon);
+    });
+  }
   function updateLabels() {
+    enhanceTikTok();
     const menuLabels = labels[locale()] || labels.en;
     document.querySelectorAll('.catalog-dropdown').forEach((dropdown) => {
       const expected = menuLabels.map((text, index) => ({
@@ -281,8 +649,47 @@
     modal.querySelector('input[name="email"]').focus();
   }
 
+  const isInsideMenu = (target) => target instanceof Element && Boolean(target.closest('.hamburger, header nav, .catalog-nav, .language-menu-control'));
+  document.addEventListener('pointerdown', (event) => {
+    if (!isInsideMenu(event.target)) closeMenus();
+  });
   document.addEventListener('click', (event) => {
-    if (!event.target.closest('.catalog-nav')) closeMenus();
+    if (!isInsideMenu(event.target)) closeMenus();
+    const hamburger = event.target instanceof Element ? event.target.closest('.hamburger') : null;
+    if (hamburger) {
+      closeMenus(hamburger.closest('header'));
+      hamburger.setAttribute('aria-expanded', String(hamburger.closest('header')?.classList.contains('menu-open')));
+    }
+    const arrow = event.target.closest('a.down[href^="#"]');
+    if (arrow) {
+      const target = document.getElementById(arrow.hash.slice(1));
+      if (target) {
+        event.preventDefault();
+        stopArrowScroll();
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+        else {
+          const start = window.scrollY;
+          const distance = target.getBoundingClientRect().top;
+          const began = performance.now();
+          originalScrollBehavior = document.documentElement.style.scrollBehavior;
+          document.documentElement.style.scrollBehavior = 'auto';
+          const step = (now) => {
+            const progress = Math.min((now - began) / 550, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            window.scrollTo(0, start + distance * eased);
+            if (progress < 1) scrollFrame = requestAnimationFrame(step);
+            else {
+              scrollFrame = 0;
+              document.documentElement.style.scrollBehavior = originalScrollBehavior;
+              originalScrollBehavior = null;
+            }
+          };
+          scrollFrame = requestAnimationFrame(step);
+        }
+        history.replaceState(null, '', arrow.hash);
+      }
+    }
     if (event.target.closest('.privacy-trigger')) openPrivacy(event.target.closest('.privacy-trigger'));
     if (event.target.closest('.privacy-close, .privacy-backdrop')) closePrivacy();
     if (event.target.closest('.subscribe-trigger')) openSubscribe(event.target.closest('.subscribe-trigger'));
@@ -293,6 +700,9 @@
     event.preventDefault();
     event.target.querySelector('.subscribe-status').textContent = (subscribeCopy[locale()] || subscribeCopy.en).pending;
   });
+  document.addEventListener('wheel', stopArrowScroll, { passive: true });
+  document.addEventListener('touchstart', stopArrowScroll, { passive: true });
+  window.addEventListener('scroll', () => closeMenus(), { passive: true });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenus();
     if (event.key === 'Escape' && document.querySelector('.privacy-modal')) closePrivacy();
@@ -317,4 +727,7 @@
 
   new MutationObserver(enhanceNavigation).observe(document.body, { childList: true, subtree: true });
   enhanceNavigation();
+  enhanceTikTok();
+  new MutationObserver(enhanceTikTok).observe(document.body,{childList:true,subtree:true});
+  ensureHeroMotion();
 })();

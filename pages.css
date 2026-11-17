@@ -43,3 +43,23 @@ body.news-dialog-open{overflow:hidden}
 .news-dialog-content p{font-size:20px;line-height:1.55;color:#ddd}
 .news-dialog-close{position:absolute;right:18px;top:18px;width:46px;height:46px;border:0;border-radius:50%;background:#000;color:#fff;font-size:34px;line-height:1;cursor:pointer}
 @media(max-width:560px){.news-dialog-content{padding:22px}.news-dialog-content p{font-size:18px}.news-dialog>img{max-height:220px}}
+
+/* Editorial and offer card images gain the same gentle hover cue. */
+.offer-card img,.news-card img{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.offer-card>div,.news-card>div{position:relative;z-index:1;background:inherit}
+@media(hover:hover) and (pointer:fine){.offer-card:hover img,.offer-card:focus-within img{transform:scale(1.085)}.news-card:hover img,.news-card:focus-within img{transform:scale(1.045)}}
+@media(prefers-reduced-motion:reduce){.offer-card img,.news-card img{transition:none}.offer-card:hover img,.offer-card:focus-within img,.news-card:hover img,.news-card:focus-within img{transform:none}}
+
+.hit-photo-link{position:relative;display:block;overflow:hidden;background:#fff}
+.hit-photo-link:focus-visible{outline:3px solid #ffce00;outline-offset:-3px}
+.offer-photo-link{position:relative;display:block;overflow:hidden;background:#fff}
+.offer-photo-link:focus-visible{outline:3px solid #ffce00;outline-offset:-3px}
+@media(hover:none){.hit-photo-link:active img{transform:scale(1.035)}.offer-link:active{filter:brightness(.9);transform:scale(.97)}}
+@media(prefers-reduced-motion:reduce){.hit-photo-link:active img,.offer-link:active{transform:none}}
+
+/* White product photographs and temporary client company copy. */
+.news-card img{background:#fff}
+.company-story{max-width:850px;margin:0 auto 56px}.company-story p{font-size:21px;line-height:1.65;margin:24px 0}.company-story h2{line-height:1.25}.company-video{max-width:850px;margin:auto}.company-video img{width:100%}
+@media(max-width:560px){.company-story p{font-size:18px}.company-story h2{font-size:27px}}
+
+.contact-enquiry{margin:40px 0;max-width:720px}.contact-enquiry-form{display:grid;gap:20px}.contact-enquiry-form label{display:grid;gap:8px}.contact-enquiry-form input,.contact-enquiry-form textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #a5adb7;border-radius:6px;font:inherit}.contact-enquiry-form button{justify-self:start;padding:12px 22px}.contact-enquiry-form :focus-visible{outline:2px solid #8a6500;outline-offset:3px}

@@ -29,6 +29,8 @@
     const player = button.closest('.video-player');
     const id = player && videoId(player);
     if (!id) return;
+    if (!window.KayoPrivacy?.state.externalMedia) { window.KayoEngagement?.openCookies(button); return; }
+    player.dataset.kayoVideoMarkup = player.innerHTML;
 
     const iframe = document.createElement('iframe');
     iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0`;
@@ -46,5 +48,6 @@
   });
   document.addEventListener('kayo:localechange', syncButtons);
   new MutationObserver(syncButtons).observe(document.body, { childList: true, subtree: true });
+  document.addEventListener('kayo:consentchange',()=>{if(!window.KayoPrivacy?.state.externalMedia)document.querySelectorAll('.video-player--active').forEach(player=>{player.innerHTML=player.dataset.kayoVideoMarkup||'';player.classList.remove('video-player--active');syncButtons()})});
   syncButtons();
 })();
