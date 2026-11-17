@@ -12,7 +12,7 @@
     const copy = window.KayoCms?.copy?.[locale]?.newsArticleBody
       || window.KayoNewPageCopy?.[locale]?.newsArticleBody
       || window.KayoNewPageCopy?.en?.newsArticleBody || '';
-    const closeLabel = { en: 'Close', uk: 'Закрити', cs: 'Zavřít', pl: 'Zamknij', de: 'Schließen', fr: 'Fermer', es: 'Cerrar' }[locale] || 'Close';
+    const closeLabel = {"en":"Close","uk":"Закрити","cs":"Zavřít","pl":"Zamknij","de":"Schließen","fr":"Fermer","es":"Cerrar","ru":"Закрыть"}[locale] || 'Close';
     const dialog = document.createElement('dialog');
     dialog.className = 'news-dialog';
     dialog.setAttribute('aria-labelledby', 'news-dialog-title');

@@ -1,22 +1,6 @@
 (() => {
-  const labels = {
-    en: ['Previous photo', 'Next photo', 'Photo'],
-    uk: ['Попереднє фото', 'Наступне фото', 'Фото'],
-    cs: ['Předchozí fotografie', 'Další fotografie', 'Fotografie'],
-    pl: ['Poprzednie zdjęcie', 'Następne zdjęcie', 'Zdjęcie'],
-    de: ['Vorheriges Foto', 'Nächstes Foto', 'Foto'],
-    fr: ['Photo précédente', 'Photo suivante', 'Photo'],
-    es: ['Foto anterior', 'Foto siguiente', 'Foto'],
-  };
-  const zoomLabels = {
-    en: ['Enlarge photo', 'Close enlarged photo', 'Zoom in', 'Fit photo'],
-    uk: ['Збільшити фото', 'Закрити збільшене фото', 'Наблизити', 'Показати повністю'],
-    cs: ['Zvětšit fotografii', 'Zavřít zvětšenou fotografii', 'Přiblížit', 'Zobrazit celé'],
-    pl: ['Powiększ zdjęcie', 'Zamknij powiększone zdjęcie', 'Przybliż', 'Pokaż całe'],
-    de: ['Foto vergrößern', 'Vergrößertes Foto schließen', 'Vergrößern', 'Ganzes Foto zeigen'],
-    fr: ['Agrandir la photo', 'Fermer la photo agrandie', 'Zoomer', 'Afficher en entier'],
-    es: ['Ampliar foto', 'Cerrar foto ampliada', 'Acercar', 'Ver foto completa'],
-  };
+  const labels = {"en":["Previous photo","Next photo","Photo"],"uk":["Попереднє фото","Наступне фото","Фото"],"cs":["Předchozí fotografie","Další fotografie","Fotografie"],"pl":["Poprzednie zdjęcie","Następne zdjęcie","Zdjęcie"],"de":["Vorheriges Foto","Nächstes Foto","Foto"],"fr":["Photo précédente","Photo suivante","Photo"],"es":["Foto anterior","Foto siguiente","Foto"],"ru":["Предыдущее фото","Следующее фото","Фото"]};
+  const zoomLabels = {"en":["Enlarge photo","Close enlarged photo","Zoom in","Fit photo"],"uk":["Збільшити фото","Закрити збільшене фото","Наблизити","Показати повністю"],"cs":["Zvětšit fotografii","Zavřít zvětšenou fotografii","Přiblížit","Zobrazit celé"],"pl":["Powiększ zdjęcie","Zamknij powiększone zdjęcie","Przybliż","Pokaż całe"],"de":["Foto vergrößern","Vergrößertes Foto schließen","Vergrößern","Ganzes Foto zeigen"],"fr":["Agrandir la photo","Fermer la photo agrandie","Zoomer","Afficher en entier"],"es":["Ampliar foto","Cerrar foto ampliada","Acercar","Ver foto completa"],"ru":["Увеличить фото","Закрыть увеличенное фото","Увеличить","Вписать фото"]};
   const states = new WeakMap();
   let zoomModal = null;
   let zoomSource = null;
@@ -74,6 +58,7 @@
     const state = states.get(zoomSource);
     if (!state) return;
     const [previousText, nextText, photoText] = labels[state.locale] || labels.en;
+    zoomModal.querySelector('.kayo-zoom-dialog').setAttribute('aria-label', photoText);
     const [enlargeText, closeText, zoomInText, fitText] = zoomLabels[state.locale] || zoomLabels.en;
     const image = zoomModal.querySelector('.kayo-zoom-viewport img');
     image.src = state.images[state.index];

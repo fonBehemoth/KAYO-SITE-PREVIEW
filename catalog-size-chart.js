@@ -1,139 +1,5 @@
 (() => {
-  const translations = {
-    en: {
-      size: 'Size', selected: 'Selected size', view: 'View size chart', close: 'Close size chart',
-      title: 'Boxing glove size guide', metric: 'Metric', imperial: 'Imperial',
-      glove: 'Glove size', weight: 'Body weight', knuckle: 'Knuckle circumference',
-      note: 'Approximate guide for 8–16 oz gloves. Fit varies by model.',
-      paragraphs: [
-        'Glove weight, measured in ounces (oz), helps you choose the right pair. The ideal size depends on your body weight, training type, and intended use.',
-        'Heavier gloves provide more cushioning and protection for you and your training partner. Lighter gloves, such as 10 oz, are commonly used for competition; heavier gloves, 14–16 oz or more, are often chosen for sparring and partner training.',
-        'For different types of training:',
-        'Beginners may prefer heavier gloves for comfort and gradual adaptation. Each model has its own fit, foam distribution, and support. Check the product details and try gloves with hand wraps to avoid pressure points.',
-        'If in doubt, ask your coach for advice tailored to your weight, level, and training goals.',
-        'Reminder: “oz” indicates the glove’s weight. Choose gloves according to your training intensity, frequency, and desired protection.',
-      ],
-      activities: [
-        ['Competition', '8–10 oz; rules often depend on the category.'],
-        ['Bag and pad work', '12–14 oz for a balance of comfort and versatility.'],
-        ['Sparring', 'At least 14 oz; 16 oz or more is often recommended for adults.'],
-      ],
-    },
-    uk: {
-      size: 'Розмір', selected: 'Обраний розмір', view: 'Таблиця розмірів', close: 'Закрити таблицю розмірів',
-      title: 'Як обрати розмір боксерських рукавичок', metric: 'Метрична', imperial: 'Імперська',
-      glove: 'Розмір рукавичок', weight: 'Вага тіла', knuckle: 'Обхват долоні на рівні кісточок',
-      note: 'Орієнтовна таблиця для рукавичок 8–16 oz. Посадка залежить від моделі.',
-      paragraphs: [
-        'Вага рукавичок вимірюється в унціях (oz) і допомагає обрати відповідну пару. Оптимальний розмір залежить від ваги тіла, виду тренувань і мети використання.',
-        'Важчі рукавички забезпечують більше амортизації та захисту для вас і партнера. Легші, наприклад 10 oz, часто використовують на змаганнях; важчі, 14–16 oz і більше, часто обирають для спарингів і роботи з партнером.',
-        'Для різних видів тренувань:',
-        'Початківцям можуть підійти важчі рукавички для комфорту й поступового звикання. Кожна модель має власну посадку, розподіл піни та підтримку. Перевіряйте опис товару й приміряйте рукавички разом із бинтами, щоб уникнути точок тиску.',
-        'Якщо сумніваєтеся, запитайте тренера: він врахує вашу вагу, рівень і цілі тренувань.',
-        'Нагадування: «oz» позначає вагу рукавички. Обирайте рукавички відповідно до інтенсивності, частоти тренувань і потрібного захисту.',
-      ],
-      activities: [
-        ['Змагання', '8–10 oz; правила часто залежать від категорії.'],
-        ['Робота з мішком і лапами', '12–14 oz для балансу комфорту та універсальності.'],
-        ['Спаринг', 'Щонайменше 14 oz; дорослим часто рекомендують 16 oz або більше.'],
-      ],
-    },
-    cs: {
-      size: 'Velikost', selected: 'Zvolená velikost', view: 'Tabulka velikostí', close: 'Zavřít tabulku velikostí',
-      title: 'Průvodce velikostmi boxerských rukavic', metric: 'Metrické', imperial: 'Imperiální',
-      glove: 'Velikost rukavic', weight: 'Tělesná hmotnost', knuckle: 'Obvod dlaně přes klouby',
-      note: 'Orientační tabulka pro rukavice 8–16 oz. Střih se liší podle modelu.',
-      paragraphs: [
-        'Hmotnost rukavic se měří v uncích (oz) a pomáhá vybrat správný pár. Vhodná velikost závisí na tělesné hmotnosti, druhu tréninku a zamýšleném použití.',
-        'Těžší rukavice poskytují více tlumení a ochrany vám i tréninkovému partnerovi. Lehčí, například 10 oz, se často používají při soutěžích; těžší, 14–16 oz a více, se často volí pro sparing a trénink s partnerem.',
-        'Pro různé druhy tréninku:',
-        'Začátečníkům mohou vyhovovat těžší rukavice kvůli pohodlí a postupnému přizpůsobení. Každý model má jiný střih, rozložení pěny a oporu. Přečtěte si údaje o výrobku a vyzkoušejte rukavice s bandážemi, aby nikde netlačily.',
-        'Pokud si nejste jistí, poraďte se s trenérem podle své hmotnosti, úrovně a tréninkových cílů.',
-        'Připomínka: „oz“ udává hmotnost rukavice. Vybírejte podle intenzity a četnosti tréninku a požadované ochrany.',
-      ],
-      activities: [
-        ['Soutěž', '8–10 oz; pravidla často závisí na kategorii.'],
-        ['Pytel a lapy', '12–14 oz pro rovnováhu pohodlí a univerzálnosti.'],
-        ['Sparing', 'Nejméně 14 oz; dospělým se často doporučuje 16 oz nebo více.'],
-      ],
-    },
-    pl: {
-      size: 'Rozmiar', selected: 'Wybrany rozmiar', view: 'Tabela rozmiarów', close: 'Zamknij tabelę rozmiarów',
-      title: 'Jak dobrać rozmiar rękawic bokserskich', metric: 'Metryczne', imperial: 'Imperialne',
-      glove: 'Rozmiar rękawic', weight: 'Masa ciała', knuckle: 'Obwód dłoni na wysokości kostek',
-      note: 'Orientacyjna tabela dla rękawic 8–16 oz. Dopasowanie zależy od modelu.',
-      paragraphs: [
-        'Waga rękawic jest mierzona w uncjach (oz) i pomaga wybrać odpowiednią parę. Właściwy rozmiar zależy od masy ciała, rodzaju treningu i planowanego zastosowania.',
-        'Cięższe rękawice zapewniają więcej amortyzacji i ochrony Tobie oraz partnerowi. Lżejsze, na przykład 10 oz, są często używane podczas zawodów; cięższe, 14–16 oz i więcej, często wybiera się do sparingów i treningu z partnerem.',
-        'Do różnych rodzajów treningu:',
-        'Początkującym mogą odpowiadać cięższe rękawice ze względu na wygodę i stopniowe przyzwyczajanie się. Każdy model ma inne dopasowanie, rozkład pianki i wsparcie. Sprawdź opis produktu i przymierz rękawice z owijkami, aby uniknąć ucisku.',
-        'W razie wątpliwości zapytaj trenera o radę dopasowaną do Twojej masy ciała, poziomu i celów treningowych.',
-        'Pamiętaj: „oz” oznacza wagę rękawicy. Wybieraj według intensywności i częstotliwości treningu oraz potrzebnej ochrony.',
-      ],
-      activities: [
-        ['Zawody', '8–10 oz; zasady często zależą od kategorii.'],
-        ['Worek i tarcze', '12–14 oz dla równowagi wygody i uniwersalności.'],
-        ['Sparing', 'Co najmniej 14 oz; dorosłym często zaleca się 16 oz lub więcej.'],
-      ],
-    },
-    de: {
-      size: 'Größe', selected: 'Gewählte Größe', view: 'Größentabelle', close: 'Größentabelle schließen',
-      title: 'Größenratgeber für Boxhandschuhe', metric: 'Metrisch', imperial: 'Imperial',
-      glove: 'Handschuhgröße', weight: 'Körpergewicht', knuckle: 'Handumfang über den Knöcheln',
-      note: 'Ungefähre Orientierung für Handschuhe mit 8–16 oz. Die Passform hängt vom Modell ab.',
-      paragraphs: [
-        'Das Gewicht von Boxhandschuhen wird in Unzen (oz) angegeben und hilft bei der Auswahl. Die passende Größe hängt vom Körpergewicht, der Trainingsart und dem Verwendungszweck ab.',
-        'Schwerere Handschuhe bieten mehr Dämpfung und Schutz für Sie und Ihren Trainingspartner. Leichtere Handschuhe wie 10 oz werden häufig im Wettkampf eingesetzt; schwerere mit 14–16 oz oder mehr werden oft für Sparring und Partnertraining gewählt.',
-        'Für verschiedene Trainingsarten:',
-        'Anfänger bevorzugen möglicherweise schwerere Handschuhe für mehr Komfort und eine allmähliche Gewöhnung. Passform, Schaumstoffverteilung und Halt unterscheiden sich je nach Modell. Prüfen Sie die Produktdetails und probieren Sie die Handschuhe mit Bandagen an, um Druckstellen zu vermeiden.',
-        'Fragen Sie im Zweifel Ihren Trainer nach einer Empfehlung passend zu Gewicht, Erfahrung und Trainingszielen.',
-        'Hinweis: „oz“ bezeichnet das Gewicht des Handschuhs. Wählen Sie nach Trainingsintensität, Häufigkeit und gewünschtem Schutz.',
-      ],
-      activities: [
-        ['Wettkampf', '8–10 oz; die Regeln hängen oft von der Kategorie ab.'],
-        ['Sack und Pratzen', '12–14 oz als Ausgleich zwischen Komfort und Vielseitigkeit.'],
-        ['Sparring', 'Mindestens 14 oz; für Erwachsene werden häufig 16 oz oder mehr empfohlen.'],
-      ],
-    },
-    fr: {
-      size: 'Taille', selected: 'Taille choisie', view: 'Guide des tailles', close: 'Fermer le guide des tailles',
-      title: 'Guide des tailles des gants de boxe', metric: 'Métrique', imperial: 'Impérial',
-      glove: 'Taille des gants', weight: 'Poids corporel', knuckle: 'Tour de main aux articulations',
-      note: 'Repères indicatifs pour les gants de 8 à 16 oz. La coupe varie selon le modèle.',
-      paragraphs: [
-        'Le poids des gants, mesuré en onces (oz), aide à choisir la bonne paire. La taille adaptée dépend de votre poids, du type d’entraînement et de l’usage prévu.',
-        'Les gants plus lourds offrent davantage d’amorti et de protection pour vous et votre partenaire. Les gants plus légers, comme ceux de 10 oz, sont souvent utilisés en compétition ; ceux de 14 à 16 oz ou plus sont fréquemment choisis pour le sparring et le travail avec un partenaire.',
-        'Selon le type d’entraînement :',
-        'Les débutants peuvent préférer des gants plus lourds pour le confort et une adaptation progressive. La coupe, la mousse et le maintien varient selon le modèle. Consultez la fiche du produit et essayez les gants avec des bandes pour éviter les points de pression.',
-        'En cas de doute, demandez conseil à votre entraîneur en fonction de votre poids, de votre niveau et de vos objectifs.',
-        'Rappel : « oz » indique le poids du gant. Choisissez selon l’intensité et la fréquence de vos séances ainsi que la protection souhaitée.',
-      ],
-      activities: [
-        ['Compétition', '8–10 oz ; les règles dépendent souvent de la catégorie.'],
-        ['Sac et pattes d’ours', '12–14 oz pour équilibrer confort et polyvalence.'],
-        ['Sparring', 'Au moins 14 oz ; 16 oz ou plus sont souvent conseillés aux adultes.'],
-      ],
-    },
-    es: {
-      size: 'Talla', selected: 'Talla elegida', view: 'Guía de tallas', close: 'Cerrar guía de tallas',
-      title: 'Guía de tallas de guantes de boxeo', metric: 'Métrico', imperial: 'Imperial',
-      glove: 'Talla del guante', weight: 'Peso corporal', knuckle: 'Contorno de la mano en los nudillos',
-      note: 'Tabla orientativa para guantes de 8 a 16 oz. El ajuste depende del modelo.',
-      paragraphs: [
-        'El peso de los guantes se mide en onzas (oz) y ayuda a elegir el par adecuado. La talla ideal depende de tu peso, el tipo de entrenamiento y el uso previsto.',
-        'Los guantes más pesados ofrecen mayor amortiguación y protección para ti y tu compañero. Los más ligeros, como los de 10 oz, suelen utilizarse en competición; los de 14–16 oz o más se eligen a menudo para el sparring y el trabajo con compañero.',
-        'Para distintos tipos de entrenamiento:',
-        'Los principiantes pueden preferir guantes más pesados por comodidad y para adaptarse poco a poco. El ajuste, la distribución de la espuma y la sujeción cambian según el modelo. Consulta la ficha del producto y pruébate los guantes con vendas para evitar puntos de presión.',
-        'Si tienes dudas, pide consejo a tu entrenador según tu peso, nivel y objetivos.',
-        'Recuerda: «oz» indica el peso del guante. Elige según la intensidad y frecuencia del entrenamiento y la protección deseada.',
-      ],
-      activities: [
-        ['Competición', '8–10 oz; las reglas suelen depender de la categoría.'],
-        ['Saco y manoplas', '12–14 oz para equilibrar comodidad y versatilidad.'],
-        ['Sparring', 'Al menos 14 oz; para adultos suelen recomendarse 16 oz o más.'],
-      ],
-    },
-  };
+  const translations = {"en":{"size":"Size","selected":"Selected size","view":"View size chart","close":"Close size chart","title":"Boxing glove size guide","metric":"Metric","imperial":"Imperial","glove":"Glove size","weight":"Body weight","knuckle":"Knuckle circumference","note":"Approximate guide for 8–16 oz gloves. Fit varies by model.","paragraphs":["Glove weight, measured in ounces (oz), helps you choose the right pair. The ideal size depends on your body weight, training type, and intended use.","Heavier gloves provide more cushioning and protection for you and your training partner. Lighter gloves, such as 10 oz, are commonly used for competition; heavier gloves, 14–16 oz or more, are often chosen for sparring and partner training.","For different types of training:","Beginners may prefer heavier gloves for comfort and gradual adaptation. Each model has its own fit, foam distribution, and support. Check the product details and try gloves with hand wraps to avoid pressure points.","If in doubt, ask your coach for advice tailored to your weight, level, and training goals.","Reminder: “oz” indicates the glove’s weight. Choose gloves according to your training intensity, frequency, and desired protection."],"activities":[["Competition","8–10 oz; rules often depend on the category."],["Bag and pad work","12–14 oz for a balance of comfort and versatility."],["Sparring","At least 14 oz; 16 oz or more is often recommended for adults."]]},"uk":{"size":"Розмір","selected":"Обраний розмір","view":"Таблиця розмірів","close":"Закрити таблицю розмірів","title":"Як обрати розмір боксерських рукавичок","metric":"Метрична","imperial":"Імперська","glove":"Розмір рукавичок","weight":"Вага тіла","knuckle":"Обхват долоні на рівні кісточок","note":"Орієнтовна таблиця для рукавичок 8–16 oz. Посадка залежить від моделі.","paragraphs":["Вага рукавичок вимірюється в унціях (oz) і допомагає обрати відповідну пару. Оптимальний розмір залежить від ваги тіла, виду тренувань і мети використання.","Важчі рукавички забезпечують більше амортизації та захисту для вас і партнера. Легші, наприклад 10 oz, часто використовують на змаганнях; важчі, 14–16 oz і більше, часто обирають для спарингів і роботи з партнером.","Для різних видів тренувань:","Початківцям можуть підійти важчі рукавички для комфорту й поступового звикання. Кожна модель має власну посадку, розподіл піни та підтримку. Перевіряйте опис товару й приміряйте рукавички разом із бинтами, щоб уникнути точок тиску.","Якщо сумніваєтеся, запитайте тренера: він врахує вашу вагу, рівень і цілі тренувань.","Нагадування: «oz» позначає вагу рукавички. Обирайте рукавички відповідно до інтенсивності, частоти тренувань і потрібного захисту."],"activities":[["Змагання","8–10 oz; правила часто залежать від категорії."],["Робота з мішком і лапами","12–14 oz для балансу комфорту та універсальності."],["Спаринг","Щонайменше 14 oz; дорослим часто рекомендують 16 oz або більше."]]},"cs":{"size":"Velikost","selected":"Zvolená velikost","view":"Tabulka velikostí","close":"Zavřít tabulku velikostí","title":"Průvodce velikostmi boxerských rukavic","metric":"Metrické","imperial":"Imperiální","glove":"Velikost rukavic","weight":"Tělesná hmotnost","knuckle":"Obvod dlaně přes klouby","note":"Orientační tabulka pro rukavice 8–16 oz. Střih se liší podle modelu.","paragraphs":["Hmotnost rukavic se měří v uncích (oz) a pomáhá vybrat správný pár. Vhodná velikost závisí na tělesné hmotnosti, druhu tréninku a zamýšleném použití.","Těžší rukavice poskytují více tlumení a ochrany vám i tréninkovému partnerovi. Lehčí, například 10 oz, se často používají při soutěžích; těžší, 14–16 oz a více, se často volí pro sparing a trénink s partnerem.","Pro různé druhy tréninku:","Začátečníkům mohou vyhovovat těžší rukavice kvůli pohodlí a postupnému přizpůsobení. Každý model má jiný střih, rozložení pěny a oporu. Přečtěte si údaje o výrobku a vyzkoušejte rukavice s bandážemi, aby nikde netlačily.","Pokud si nejste jistí, poraďte se s trenérem podle své hmotnosti, úrovně a tréninkových cílů.","Připomínka: „oz“ udává hmotnost rukavice. Vybírejte podle intenzity a četnosti tréninku a požadované ochrany."],"activities":[["Soutěž","8–10 oz; pravidla často závisí na kategorii."],["Pytel a lapy","12–14 oz pro rovnováhu pohodlí a univerzálnosti."],["Sparing","Nejméně 14 oz; dospělým se často doporučuje 16 oz nebo více."]]},"pl":{"size":"Rozmiar","selected":"Wybrany rozmiar","view":"Tabela rozmiarów","close":"Zamknij tabelę rozmiarów","title":"Jak dobrać rozmiar rękawic bokserskich","metric":"Metryczne","imperial":"Imperialne","glove":"Rozmiar rękawic","weight":"Masa ciała","knuckle":"Obwód dłoni na wysokości kostek","note":"Orientacyjna tabela dla rękawic 8–16 oz. Dopasowanie zależy od modelu.","paragraphs":["Waga rękawic jest mierzona w uncjach (oz) i pomaga wybrać odpowiednią parę. Właściwy rozmiar zależy od masy ciała, rodzaju treningu i planowanego zastosowania.","Cięższe rękawice zapewniają więcej amortyzacji i ochrony Tobie oraz partnerowi. Lżejsze, na przykład 10 oz, są często używane podczas zawodów; cięższe, 14–16 oz i więcej, często wybiera się do sparingów i treningu z partnerem.","Do różnych rodzajów treningu:","Początkującym mogą odpowiadać cięższe rękawice ze względu na wygodę i stopniowe przyzwyczajanie się. Każdy model ma inne dopasowanie, rozkład pianki i wsparcie. Sprawdź opis produktu i przymierz rękawice z owijkami, aby uniknąć ucisku.","W razie wątpliwości zapytaj trenera o radę dopasowaną do Twojej masy ciała, poziomu i celów treningowych.","Pamiętaj: „oz” oznacza wagę rękawicy. Wybieraj według intensywności i częstotliwości treningu oraz potrzebnej ochrony."],"activities":[["Zawody","8–10 oz; zasady często zależą od kategorii."],["Worek i tarcze","12–14 oz dla równowagi wygody i uniwersalności."],["Sparing","Co najmniej 14 oz; dorosłym często zaleca się 16 oz lub więcej."]]},"de":{"size":"Größe","selected":"Gewählte Größe","view":"Größentabelle","close":"Größentabelle schließen","title":"Größenratgeber für Boxhandschuhe","metric":"Metrisch","imperial":"Imperial","glove":"Handschuhgröße","weight":"Körpergewicht","knuckle":"Handumfang über den Knöcheln","note":"Ungefähre Orientierung für Handschuhe mit 8–16 oz. Die Passform hängt vom Modell ab.","paragraphs":["Das Gewicht von Boxhandschuhen wird in Unzen (oz) angegeben und hilft bei der Auswahl. Die passende Größe hängt vom Körpergewicht, der Trainingsart und dem Verwendungszweck ab.","Schwerere Handschuhe bieten mehr Dämpfung und Schutz für Sie und Ihren Trainingspartner. Leichtere Handschuhe wie 10 oz werden häufig im Wettkampf eingesetzt; schwerere mit 14–16 oz oder mehr werden oft für Sparring und Partnertraining gewählt.","Für verschiedene Trainingsarten:","Anfänger bevorzugen möglicherweise schwerere Handschuhe für mehr Komfort und eine allmähliche Gewöhnung. Passform, Schaumstoffverteilung und Halt unterscheiden sich je nach Modell. Prüfen Sie die Produktdetails und probieren Sie die Handschuhe mit Bandagen an, um Druckstellen zu vermeiden.","Fragen Sie im Zweifel Ihren Trainer nach einer Empfehlung passend zu Gewicht, Erfahrung und Trainingszielen.","Hinweis: „oz“ bezeichnet das Gewicht des Handschuhs. Wählen Sie nach Trainingsintensität, Häufigkeit und gewünschtem Schutz."],"activities":[["Wettkampf","8–10 oz; die Regeln hängen oft von der Kategorie ab."],["Sack und Pratzen","12–14 oz als Ausgleich zwischen Komfort und Vielseitigkeit."],["Sparring","Mindestens 14 oz; für Erwachsene werden häufig 16 oz oder mehr empfohlen."]]},"fr":{"size":"Taille","selected":"Taille choisie","view":"Guide des tailles","close":"Fermer le guide des tailles","title":"Guide des tailles des gants de boxe","metric":"Métrique","imperial":"Impérial","glove":"Taille des gants","weight":"Poids corporel","knuckle":"Tour de main aux articulations","note":"Repères indicatifs pour les gants de 8 à 16 oz. La coupe varie selon le modèle.","paragraphs":["Le poids des gants, mesuré en onces (oz), aide à choisir la bonne paire. La taille adaptée dépend de votre poids, du type d’entraînement et de l’usage prévu.","Les gants plus lourds offrent davantage d’amorti et de protection pour vous et votre partenaire. Les gants plus légers, comme ceux de 10 oz, sont souvent utilisés en compétition ; ceux de 14 à 16 oz ou plus sont fréquemment choisis pour le sparring et le travail avec un partenaire.","Selon le type d’entraînement :","Les débutants peuvent préférer des gants plus lourds pour le confort et une adaptation progressive. La coupe, la mousse et le maintien varient selon le modèle. Consultez la fiche du produit et essayez les gants avec des bandes pour éviter les points de pression.","En cas de doute, demandez conseil à votre entraîneur en fonction de votre poids, de votre niveau et de vos objectifs.","Rappel : « oz » indique le poids du gant. Choisissez selon l’intensité et la fréquence de vos séances ainsi que la protection souhaitée."],"activities":[["Compétition","8–10 oz ; les règles dépendent souvent de la catégorie."],["Sac et pattes d’ours","12–14 oz pour équilibrer confort et polyvalence."],["Sparring","Au moins 14 oz ; 16 oz ou plus sont souvent conseillés aux adultes."]]},"es":{"size":"Talla","selected":"Talla elegida","view":"Guía de tallas","close":"Cerrar guía de tallas","title":"Guía de tallas de guantes de boxeo","metric":"Métrico","imperial":"Imperial","glove":"Talla del guante","weight":"Peso corporal","knuckle":"Contorno de la mano en los nudillos","note":"Tabla orientativa para guantes de 8 a 16 oz. El ajuste depende del modelo.","paragraphs":["El peso de los guantes se mide en onzas (oz) y ayuda a elegir el par adecuado. La talla ideal depende de tu peso, el tipo de entrenamiento y el uso previsto.","Los guantes más pesados ofrecen mayor amortiguación y protección para ti y tu compañero. Los más ligeros, como los de 10 oz, suelen utilizarse en competición; los de 14–16 oz o más se eligen a menudo para el sparring y el trabajo con compañero.","Para distintos tipos de entrenamiento:","Los principiantes pueden preferir guantes más pesados por comodidad y para adaptarse poco a poco. El ajuste, la distribución de la espuma y la sujeción cambian según el modelo. Consulta la ficha del producto y pruébate los guantes con vendas para evitar puntos de presión.","Si tienes dudas, pide consejo a tu entrenador según tu peso, nivel y objetivos.","Recuerda: «oz» indica el peso del guante. Elige según la intensidad y frecuencia del entrenamiento y la protección deseada."],"activities":[["Competición","8–10 oz; las reglas suelen depender de la categoría."],["Saco y manoplas","12–14 oz para equilibrar comodidad y versatilidad."],["Sparring","Al menos 14 oz; para adultos suelen recomendarse 16 oz o más."]]},"ru":{"size":"Размер","selected":"Выбранный размер","view":"Таблица размеров","close":"Закрыть таблицу размеров","title":"Как выбрать размер боксёрских перчаток","metric":"Метрическая система","imperial":"Британская система","glove":"Размер перчаток","weight":"Масса тела","knuckle":"Обхват кисти по костяшкам","note":"Ориентир для перчаток 8–16 oz. Посадка зависит от модели.","paragraphs":["Вес перчаток в унциях (oz) помогает выбрать подходящую пару. Выбор зависит от массы тела, типа тренировок и назначения.","Более тяжёлые перчатки обеспечивают больше амортизации для вас и партнёра. Лёгкие, например 10 oz, обычно используют на соревнованиях; более тяжёлые, 14–16 oz и выше, часто выбирают для спаррингов и работы с партнёром.","Для разных типов тренировок:","Начинающим могут подойти более тяжёлые перчатки для комфорта и постепенной адаптации. У каждой модели свои посадка, распределение наполнителя и поддержка. Изучите описание и примеряйте перчатки с бинтами, чтобы избежать давления.","Если сомневаетесь, спросите тренера с учётом вашей массы тела, уровня и целей.","Помните: oz обозначает вес перчатки. Выбирайте перчатки с учётом интенсивности, частоты тренировок и необходимой защиты."],"activities":[["Соревнования","8–10 oz; правила часто зависят от категории."],["Работа на мешке и лапах","12–14 oz для баланса комфорта и универсальности."],["Спарринг","Не менее 14 oz; для взрослых часто рекомендуют 16 oz и больше."]]}};
 
   const metricRows = [
     [8, 36, 51, 14, 16.5], [10, 51, 60, 16.5, 19],
@@ -141,7 +7,7 @@
     [16, 86, 120, 21.6, 24],
   ];
   const selectedSizes = new Map();
-  const mmaLabels = {"en":["MMA glove size chart","Glove size","Knuckle width","Measure across the knuckles, without the thumb."],"uk":["Таблиця розмірів рукавиць MMA","Розмір рукавиць","Ширина долоні на рівні кісточок","Виміряйте ширину долоні на рівні кісточок, без великого пальця."],"cs":["Tabulka velikostí MMA rukavic","Velikost rukavic","Šířka přes klouby","Změřte šířku ruky přes klouby bez palce."],"pl":["Tabela rozmiarów rękawic MMA","Rozmiar rękawic","Szerokość dłoni na wysokości kostek","Zmierz szerokość dłoni na wysokości kostek, bez kciuka."],"de":["Größentabelle für MMA-Handschuhe","Handschuhgröße","Handbreite an den Knöcheln","Miss die Handbreite an den Knöcheln ohne Daumen."],"fr":["Guide des tailles des gants MMA","Taille des gants","Largeur aux articulations","Mesurez la largeur de la main au niveau des articulations, sans le pouce."],"es":["Tabla de tallas de guantes MMA","Talla del guante","Anchura a la altura de los nudillos","Mide la anchura de la mano a la altura de los nudillos, sin el pulgar."]};
+  const mmaLabels = {"en":["MMA glove size chart","Glove size","Knuckle width","Measure across the knuckles, without the thumb."],"uk":["Таблиця розмірів рукавиць MMA","Розмір рукавиць","Ширина долоні на рівні кісточок","Виміряйте ширину долоні на рівні кісточок, без великого пальця."],"cs":["Tabulka velikostí MMA rukavic","Velikost rukavic","Šířka přes klouby","Změřte šířku ruky přes klouby bez palce."],"pl":["Tabela rozmiarów rękawic MMA","Rozmiar rękawic","Szerokość dłoni na wysokości kostek","Zmierz szerokość dłoni na wysokości kostek, bez kciuka."],"de":["Größentabelle für MMA-Handschuhe","Handschuhgröße","Handbreite an den Knöcheln","Miss die Handbreite an den Knöcheln ohne Daumen."],"fr":["Guide des tailles des gants MMA","Taille des gants","Largeur aux articulations","Mesurez la largeur de la main au niveau des articulations, sans le pouce."],"es":["Tabla de tallas de guantes MMA","Talla del guante","Anchura a la altura de los nudillos","Mide la anchura de la mano a la altura de los nudillos, sin el pulgar."],"ru":["Таблица размеров перчаток MMA","Размер перчаток","Ширина кисти по костяшкам","Измеряйте кисть по костяшкам, без большого пальца."]};
   let chartType = "boxing";
   let chart = null;
   let chartTrigger = null;
@@ -192,8 +58,8 @@
     const rows = metricRows.map(([oz, minWeight, maxWeight, minHand, maxHand]) => {
       const row = document.createElement('tr');
       const values = unit === 'metric'
-        ? [`${oz} oz`, `${minWeight}–${maxWeight} kg`, `${minHand}–${maxHand} cm`]
-        : [`${oz} oz`, `${Math.round(minWeight * 2.20462)}–${Math.round(maxWeight * 2.20462)} lb`, `${formatInches(minHand)}–${formatInches(maxHand)} in`];
+        ? [`${oz} oz`, `${minWeight}–${maxWeight} ${window.KayoLocale.unit("kg")}`, `${minHand}–${maxHand} ${window.KayoLocale.unit("cm")}`]
+        : [`${oz} oz`, `${Math.round(minWeight * 2.20462)}–${Math.round(maxWeight * 2.20462)} ${window.KayoLocale.unit("lb")}`, `${formatInches(minHand)}–${formatInches(maxHand)} ${window.KayoLocale.unit("in")}`];
       values.forEach((value, index) => {
         const cell = document.createElement(index === 0 ? 'th' : 'td');
         if (index === 0) cell.scope = 'row';
@@ -238,7 +104,7 @@
     for (const [size, values] of [['S',[7.6,8.3]],['M',[8.9,9.5]],['L',[9.5,10.2]],['XL',[10.2]]]) {
       const row = document.createElement('tr');
       const heading = document.createElement('th'); heading.scope = 'row'; heading.textContent = size;
-      const cell = document.createElement('td'); cell.textContent = values.map(v => unit === 'metric' ? v.toFixed(1) : (v / 2.54).toFixed(2)).join('–') + (unit === 'metric' ? ' cm' : ' in');
+      const cell = document.createElement('td'); cell.textContent = values.map(v => unit === 'metric' ? v.toFixed(1) : (v / 2.54).toFixed(2)).join('–') + (' ' + window.KayoLocale.unit(unit === 'metric' ? 'cm' : 'in'));
       row.append(heading, cell); table.querySelector('tbody').append(row);
     }
     chart.querySelector('.kayo-size-chart-note').textContent = '';
@@ -263,16 +129,7 @@
     chartTrigger = null;
   }
 
-  const stockCopy = {
-    ru: ["В наличии", "Выберите размер, чтобы проверить наличие", "Нет в наличии"],
-    en: ['Available', 'Choose a size to see availability', 'Out of stock'],
-    uk: ['У наявності', 'Оберіть розмір, щоб перевірити наявність', 'Немає в наявності'],
-    cs: ['Skladem', 'Pro ověření dostupnosti vyberte velikost', 'Není skladem'],
-    pl: ['Dostępne', 'Wybierz rozmiar, aby sprawdzić dostępność', 'Brak w magazynie'],
-    de: ['Verfügbar', 'Größe wählen, um die Verfügbarkeit zu sehen', 'Nicht auf Lager'],
-    fr: ['Disponible', 'Choisissez une taille pour voir la disponibilité', 'Rupture de stock'],
-    es: ['Disponible', 'Elige una talla para ver la disponibilidad', 'Agotado'],
-  };
+  const stockCopy = {"ru":["В наличии","Выберите размер, чтобы проверить наличие","Нет в наличии"],"en":["Available","Choose a size to see availability","Out of stock"],"uk":["У наявності","Оберіть розмір, щоб перевірити наявність","Немає в наявності"],"cs":["Skladem","Pro ověření dostupnosti vyberte velikost","Není skladem"],"pl":["Dostępne","Wybierz rozmiar, aby sprawdzić dostępność","Brak w magazynie"],"de":["Verfügbar","Größe wählen, um die Verfügbarkeit zu sehen","Nicht auf Lager"],"fr":["Disponible","Choisissez une taille pour voir la disponibilité","Rupture de stock"],"es":["Disponible","Elige una talla para ver la disponibilidad","Agotado"]};
   function renderSelectedSku(modal, product) {
     const sizes = product.variants || [];
     const remembered = selectedSizes.get(version(product));
@@ -283,12 +140,13 @@
     if (size !== null) modal.dataset.selectedSize = size;
     else delete modal.dataset.selectedSize;
     const rows = modal.querySelector('.product-modal-specifications dl')?.children;
+    if (rows?.[3]) rows[3].querySelector('dd').textContent = size || '—';
     if (rows?.[2]) rows[2].querySelector('dd').textContent = sku?.article || (!sizes.length ? product.specifications?.article : null) || '—';
     for (const key of ['netWeightGrams','grossWeightGrams','barcode']) {
       const row = modal.querySelector(`[data-spec-key="${key}"]`);
       if (!row) continue;
       const value = sku?.specifications?.[key];
-      const text = key === 'barcode' ? (typeof value === 'string' ? value : '—') : (Number.isInteger(value) && value > 0 ? `${new Intl.NumberFormat(activeLocale).format(value)} g` : (!sizes.length && row.dataset.baseValue ? row.dataset.baseValue : '—'));
+      const text = key === 'barcode' ? (typeof value === 'string' ? value : '—') : (Number.isInteger(value) && value > 0 ? `${new Intl.NumberFormat(activeLocale).format(value)} ${window.KayoLocale.unit("g")}` : (!sizes.length && row.dataset.baseValue ? row.dataset.baseValue : '—'));
       row.querySelector('dd').textContent = text;
     }
     modal.dispatchEvent(new CustomEvent('kayo:variantchange', {bubbles:true, detail:{productSlug:product.slug || product.image, skuId:sku?.id ?? null, size, article:sku?.article ?? null, stockQuantity:sku?.stockQuantity ?? null}}));

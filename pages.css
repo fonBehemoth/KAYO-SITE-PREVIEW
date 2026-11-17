@@ -63,3 +63,7 @@ body.news-dialog-open{overflow:hidden}
 @media(max-width:560px){.company-story p{font-size:18px}.company-story h2{font-size:27px}}
 
 .contact-enquiry{margin:40px 0;max-width:720px}.contact-enquiry-form{display:grid;gap:20px}.contact-enquiry-form label{display:grid;gap:8px}.contact-enquiry-form input,.contact-enquiry-form textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #a5adb7;border-radius:6px;font:inherit}.contact-enquiry-form button{justify-self:start;padding:12px 22px}.contact-enquiry-form :focus-visible{outline:2px solid #8a6500;outline-offset:3px}
+
+/* Long translations must wrap inside the page and modal rather than widen the viewport. */
+.sub-hero>div{min-width:0;max-width:100%}.sub-hero h1{overflow-wrap:anywhere;hyphens:auto}
+.kayo-dialog h2{min-width:0;overflow-wrap:anywhere}.kayo-actions>*{min-width:0;overflow-wrap:anywhere}

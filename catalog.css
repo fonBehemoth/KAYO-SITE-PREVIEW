@@ -221,3 +221,7 @@ body:has(.catalog-filter-dialog[open]){overflow:hidden}
 .catalog-subcategory-grid:not(.catalog-subcategory-grid--gloves) .has-lifestyle{overflow:hidden}
 .catalog-subcategory-card[href="#protection-mouthguards"] .catalog-subcategory-lifestyle-image{object-position:80% 40%}
 .product-related{margin-top:24px}.product-related-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product-related-grid a{color:inherit;text-decoration:none;padding:10px;background:#fff;border:1px solid #ccd1d8;border-radius:8px}.product-related-grid img{display:block;width:100%;height:110px;object-fit:contain}.product-related-grid span{display:block;overflow-wrap:anywhere}
+
+.catalog-subcategory-grid--gloves .catalog-subcategory-card[href="#protection-mouthguards"] .catalog-subcategory-lifestyle-image{object-position:80% 40%}
+.catalog-tabs{position:relative;margin-top:0}.catalog-filters{padding-bottom:20px}
+.catalog-subcategory-grid--gloves .catalog-subcategory-copy strong{overflow-wrap:anywhere;min-width:0}

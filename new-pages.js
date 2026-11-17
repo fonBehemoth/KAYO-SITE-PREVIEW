@@ -36,19 +36,11 @@
       const title = escapeHtml(offer.title);
       return `<article class="offer-card"><a class="offer-photo-link" href="${escapeHtml(offer.href)}" aria-label="${action}: ${title}"><img src="${escapeHtml(offer.imageUrl)}" alt="" loading="lazy" decoding="async"></a><div><p class="eyebrow">${text(locale, 'offersLabel')}</p><h2>${title}</h2><a href="${escapeHtml(offer.href)}" class="offer-link">${action} <span class="kayo-arrow kayo-arrow--diagonal" aria-hidden="true"></span></a></div></article>`;
     }).join('');
-    const empty = { en: 'There are no current offers.', uk: 'Наразі немає активних акцій.', cs: 'Momentálně nejsou žádné akce.', pl: 'Obecnie nie ma aktywnych promocji.', de: 'Derzeit gibt es keine Angebote.', fr: 'Aucune offre en cours.', es: 'No hay ofertas activas en este momento.' };
+    const empty = {"en":"There are no current offers.","uk":"Наразі немає активних акцій.","cs":"Momentálně nejsou žádné akce.","pl":"Obecnie nie ma aktywnych promocji.","de":"Derzeit gibt es keine Angebote.","fr":"Aucune offre en cours.","es":"No hay ofertas activas en este momento.","ru":"Действующих акций пока нет."};
     return hero(locale, 'offersTitle', 'offersLead') + `<main class="page-wrap offers-grid">${cards || `<p class="offers-empty">${empty[locale] || empty.en}</p>`}</main>`;
   }
 
-  const hitsCopy = {
-    en: ['Best sellers KAYO', 'Products selected for the best sellers collection.', 'Best seller', 'View details', 'No best sellers have been selected yet.'],
-    uk: ['Хіти продажів KAYO', 'Товари, обрані для добірки хітів продажів.', 'Хіт продажів', 'Детальніше', 'Хіти продажів поки не обрані.'],
-    cs: ['Nejprodávanější KAYO', 'Produkty vybrané do kolekce nejprodávanějších.', 'Bestseller', 'Zobrazit detail', 'Zatím nebyly vybrány žádné bestsellery.'],
-    pl: ['Bestsellery KAYO', 'Produkty wybrane do kolekcji bestsellerów.', 'Bestseller', 'Zobacz szczegóły', 'Nie wybrano jeszcze bestsellerów.'],
-    de: ['KAYO Bestseller', 'Produkte aus der ausgewählten Bestseller-Kollektion.', 'Bestseller', 'Details ansehen', 'Es wurden noch keine Bestseller ausgewählt.'],
-    fr: ['Meilleures ventes KAYO', 'Produits sélectionnés pour la collection des meilleures ventes.', 'Meilleure vente', 'Voir les détails', 'Aucune meilleure vente n’a encore été sélectionnée.'],
-    es: ['Más vendidos KAYO', 'Productos seleccionados para la colección de los más vendidos.', 'Más vendido', 'Ver detalles', 'Todavía no se han seleccionado productos destacados.'],
-  };
+  const hitsCopy = {"en":["Best sellers KAYO","Products selected for the best sellers collection.","Best seller","View details","No best sellers have been selected yet."],"uk":["Хіти продажів KAYO","Товари, обрані для добірки хітів продажів.","Хіт продажів","Детальніше","Хіти продажів поки не обрані."],"cs":["Nejprodávanější KAYO","Produkty vybrané do kolekce nejprodávanějších.","Bestseller","Zobrazit detail","Zatím nebyly vybrány žádné bestsellery."],"pl":["Bestsellery KAYO","Produkty wybrane do kolekcji bestsellerów.","Bestseller","Zobacz szczegóły","Nie wybrano jeszcze bestsellerów."],"de":["KAYO Bestseller","Produkte aus der ausgewählten Bestseller-Kollektion.","Bestseller","Details ansehen","Es wurden noch keine Bestseller ausgewählt."],"fr":["Meilleures ventes KAYO","Produits sélectionnés pour la collection des meilleures ventes.","Meilleure vente","Voir les détails","Aucune meilleure vente n’a encore été sélectionnée."],"es":["Más vendidos KAYO","Productos seleccionados para la colección de los más vendidos.","Más vendido","Ver detalles","Todavía no se han seleccionado productos destacados."],"ru":["Хиты продаж KAYO","Товары, выбранные для подборки хитов продаж.","Хит продаж","Подробнее","Хиты продаж пока не выбраны."]};
 
   function hits(locale) {
     const [title, lead, label, action, empty] = hitsCopy[locale] || hitsCopy.en;

@@ -4,3 +4,5 @@
 @media(prefers-reduced-motion:reduce){.kayo-dialog,.kayo-float{scroll-behavior:auto;transition:none}}
 
 body.kayo-dialog-open{overflow:hidden}.kayo-dialog label.kayo-cookie-row{display:flex}
+.kayo-dialog h2{min-width:0;overflow-wrap:anywhere}.kayo-actions>*{min-width:0;overflow-wrap:anywhere}
+.kayo-dialog-body{overflow-wrap:anywhere}

@@ -1,9 +1,5 @@
 (() => {
-  const labels = {
-    en: 'Play video', uk: 'Відтворити відео', cs: 'Přehrát video',
-    pl: 'Odtwórz wideo', de: 'Video abspielen', fr: 'Lire la vidéo',
-    es: 'Reproducir vídeo',
-  };
+  const labels = {"en":"Play video","uk":"Відтворити відео","cs":"Přehrát video","pl":"Odtwórz wideo","de":"Video abspielen","fr":"Lire la vidéo","es":"Reproducir vídeo","ru":"Воспроизвести видео"};
   const validId = (value) => typeof value === 'string' && /^[A-Za-z0-9_-]{11}$/.test(value);
   const locale = () => document.querySelector('#language')?.value?.toLowerCase()
     || document.documentElement.lang?.toLowerCase() || 'en';
